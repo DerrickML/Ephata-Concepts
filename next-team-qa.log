@@ -1,0 +1,225 @@
+
+> ephata-concepts@1.0.0 start
+> next start -p 3003
+
+▲ Next.js 16.2.7
+- Local:         http://localhost:3003
+- Network:       http://172.23.128.1:3003
+✓ Ready in 381ms
+Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+⨯ unhandledRejection:  Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+⨯ unhandledRejection:  Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+⨯ unhandledRejection:  Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+⨯ unhandledRejection:  Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}
+⨯ Error [ChunkLoadError]: Failed to load chunk server/chunks/ssr/_0w86shh._.js from module 82912
+    at Context.loadChunkAsync [as l] (E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js:766:27) {
+  digest: '3231721966',
+  [cause]: Error: Cannot find module 'E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\_0w86shh._.js'
+  Require stack:
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\chunks\ssr\[turbopack]_runtime.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\.next\server\app\_global-error\page.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\require.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\next.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\server\lib\start-server.js
+  - E:\Derrick\Projects\Ephata\app\Ephata Concepts App\node_modules\next\dist\cli\next-start.js
+      at ignore-listed frames {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\chunks\\ssr\\[turbopack]_runtime.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\.next\\server\\app\\_global-error\\page.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\require.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\next.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\server\\lib\\start-server.js',
+      'E:\\Derrick\\Projects\\Ephata\\app\\Ephata Concepts App\\node_modules\\next\\dist\\cli\\next-start.js'
+    ]
+  }
+}

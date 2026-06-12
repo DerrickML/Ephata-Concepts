@@ -1,0 +1,16 @@
+.env
+.env*.local
+.next/
+node_modules/
+out/
+coverage/
+npm-debug.log*
+next-dev*.log
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+data/*.tmp
+data/*
+!data/.gitkeep
+/skills-lock.json
+/.agents/skills

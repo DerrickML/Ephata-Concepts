@@ -1,0 +1,31 @@
+{
+  "name": "ephata-concepts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "node scripts/smoke-test.js",
+    "init-storage": "node scripts/init-storage.js",
+    "seed": "node scripts/seed-data.js"
+  },
+  "dependencies": {
+    "@tiptap/extension-link": "^3.26.0",
+    "@tiptap/extension-placeholder": "^3.26.0",
+    "@tiptap/react": "^3.26.0",
+    "@tiptap/starter-kit": "^3.26.0",
+    "lucide-react": "latest",
+    "next": "latest",
+    "nodemailer": "^8.0.11",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.0"
+  }
+}
