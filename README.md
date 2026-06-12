@@ -1,18 +1,23 @@
 # Ephata Concepts Website
 
-Production-ready Next.js website for Ephata Concepts, an event planning and coordination company based in Kampala, Uganda.
-
-The first version uses JSON files for content management and stores uploaded images in a private server-side data directory. This keeps the frontend CMS-ready while avoiding a database dependency for the MVP.
+Next.js website and administration system for Ephata Concepts. The application uses MySQL/MariaDB for content, authentication, RBAC, enquiries, settings, email state, and uploaded media.
 
 ## Tech Stack
 
 - Next.js App Router
-- JavaScript and JSX only
-- React
-- Tailwind CSS v4 with custom CSS
-- JSON file data store
-- Node.js filesystem utilities
-- Private upload storage exposed through safe API routes
+- React and JavaScript/JSX
+- Tailwind CSS v4
+- MySQL 8 or MariaDB 10.4+
+- `mysql2` connection pooling
+- TipTap rich-text editing
+- Nodemailer SMTP integration
+
+## Requirements
+
+- Node.js 20 or newer
+- MySQL 8+, MariaDB 10.4+, or XAMPP with MySQL/MariaDB
+- A database account with access only to the application database
+- `max_allowed_packet` of at least 32 MB because uploaded images are stored as `LONGBLOB`
 
 ## Installation
 
@@ -20,50 +25,176 @@ The first version uses JSON files for content management and stores uploaded ima
 npm install
 ```
 
-## Environment Variables
-
-Create `.env.local`:
+Create `.env.local` from `.env.example`. The required database settings are:
 
 ```env
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=change-me-now
-ADMIN_SESSION_SECRET=replace-with-a-long-random-secret
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=ephata_concepts
+DB_USER=ephata_app
+DB_PASSWORD=use-a-long-random-password
+DB_CONNECTION_LIMIT=10
+DB_SSL=false
+DB_MIGRATION_USER=ephata_migrator
+DB_MIGRATION_PASSWORD=use-a-separate-long-random-password
 ```
 
-`ADMIN_PASSWORD` is read from environment variables and is not stored in JSON. For production, replace the MVP plain password check with a hashed password flow.
+`DB_USER` has runtime read/write permissions only. `DB_MIGRATION_USER` can change the schema and should be injected only while running migrations. Keep `DB_ADMIN_USER` and `DB_ADMIN_PASSWORD` out of the production runtime environment; they are used only by the optional provisioning command.
 
-## Initialize Storage
+## XAMPP Setup
+
+Start MySQL from the XAMPP Control Panel, configure `.env.local`, then run:
 
 ```bash
-npm run init-storage
+npm run db:setup
+npm run db:migrate
 ```
 
-This creates:
+`db:setup` creates a DML-only runtime user and a separate schema migration user using `DB_ADMIN_USER`, sets the running server's `max_allowed_packet` to 32 MB, and grants access only to `DB_NAME`.
 
-```txt
-data/storage/uploads/brand
-data/storage/uploads/portfolio
-data/storage/uploads/blog
-data/storage/uploads/testimonials
-data/storage/uploads/services
-data/storage/uploads/packages
-data/storage/uploads/temp
+To make the packet setting survive XAMPP restarts, edit `C:\xampp\mysql\bin\my.ini`:
+
+```ini
+[mysqld]
+max_allowed_packet=32M
 ```
 
-The script also creates missing JSON files in `data/`, copies supplied brand PNGs from `logos-icons/` into the private brand upload folder when present, and copies legacy files from `/storage/ephata/uploads` into `data/storage/uploads` when that old folder exists.
+Restart MySQL from the XAMPP Control Panel afterward.
 
-## Seed Starter Content
+## Ubuntu MySQL or MariaDB Setup
+
+Install and secure the database server if it is not already configured. Use the package that matches the VPS:
 
 ```bash
+sudo apt update
+sudo apt install mysql-server       # Oracle MySQL
+# or
+sudo apt install mariadb-server     # MariaDB
+sudo mysql_secure_installation
+```
+
+Create the database and runtime user. Replace the example password before running this:
+
+```sql
+sudo mysql
+
+CREATE DATABASE ephata_concepts
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+CREATE USER 'ephata_app'@'localhost'
+  IDENTIFIED BY 'replace-with-a-long-random-password';
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+  ON ephata_concepts.*
+  TO 'ephata_app'@'localhost';
+
+CREATE USER 'ephata_migrator'@'localhost'
+  IDENTIFIED BY 'replace-with-a-different-long-random-password';
+
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, INDEX, REFERENCES, DROP
+  ON ephata_concepts.*
+  TO 'ephata_migrator'@'localhost';
+
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+First inspect which configuration directories the installation includes:
+
+```bash
+grep -R "^[[:space:]]*!includedir" /etc/mysql/my.cnf /etc/mysql/mariadb.cnf 2>/dev/null
+mysql --version
+```
+
+For Ubuntu MariaDB installations that contain `/etc/mysql/mariadb.conf.d`, create an application-specific override:
+
+```bash
+sudo tee /etc/mysql/mariadb.conf.d/60-ephata.cnf >/dev/null <<'EOF'
+[mysqld]
+max_allowed_packet=32M
+EOF
+```
+
+For Oracle MySQL installations that contain `/etc/mysql/mysql.conf.d`, use this instead:
+
+```bash
+sudo tee /etc/mysql/mysql.conf.d/ephata.cnf >/dev/null <<'EOF'
+[mysqld]
+max_allowed_packet=32M
+EOF
+```
+
+Do not create both files. Use the directory included by the installed server. The resulting configuration is:
+
+```ini
+[mysqld]
+max_allowed_packet=32M
+```
+
+Then restart and verify the applicable service:
+
+```bash
+sudo systemctl restart mariadb   # MariaDB
+# or
+sudo systemctl restart mysql     # Oracle MySQL
+
+sudo systemctl status mariadb --no-pager || sudo systemctl status mysql --no-pager
+mysql -u ephata_app -p -e "SELECT VERSION(), @@max_allowed_packet;"
+```
+
+On a remote database server, bind MySQL to the private network only, restrict the database user's host, require TLS, and set `DB_SSL=true`.
+
+## Database Migrations
+
+Apply versioned schema migrations after every deployment:
+
+```bash
+npm run db:migrate
+```
+
+Applied versions are recorded in `schema_migrations`, so the command is safe to rerun. Do not edit an applied migration; add a new migration instead.
+
+The migration command uses `DB_MIGRATION_USER`; normal application requests use `DB_USER`. Remove migration credentials from the long-running process environment after deployment when your process manager supports deployment-only secrets.
+
+The schema uses dedicated SQL tables for each application collection, indexed relationship columns, foreign keys for core category/user/enquiry relationships, JSON payloads for flexible content fields, and `media_assets` for binary uploads.
+
+## One-Time JSON Migration
+
+The legacy JSON files and `data/storage/uploads` directory are migration inputs only. Before importing, make a complete copy of `data/` and a database backup if the target database already contains records.
+
+Run the following exactly once when moving an existing installation:
+
+```bash
+npm run db:migrate
+npm run db:import
+npm run db:verify
+```
+
+`db:import` is idempotent for the same source snapshot, but it synchronizes database collections to those files. Do not run it during routine deployments after users have started editing database content.
+
+`db:verify` compares every legacy collection count and validates every imported media file by byte length and SHA-256 checksum.
+
+For a new installation without legacy data, apply migrations and seed starter content instead:
+
+```bash
+npm run db:migrate
 npm run seed
 ```
 
-Use `-- --force` to overwrite existing seeded content:
+## Uploaded Media
 
-```bash
-npm run seed -- --force
+Uploaded JPEG, PNG, WebP, and trusted brand SVG files are stored in `media_assets.content` as `LONGBLOB`. Metadata includes the stable storage key, MIME type, byte length, SHA-256 checksum, and timestamps.
+
+Public URLs remain stable:
+
+```txt
+/api/uploads/{folder}/{filename}
 ```
+
+The route reads the BLOB from MySQL and returns immutable caching headers and an ETag. Remote image URLs and static files under `public/` continue to work.
+
+The application upload limit remains 10 MB. Keeping `max_allowed_packet` at 32 MB provides headroom for prepared-statement overhead and future metadata.
 
 ## Development
 
@@ -71,100 +202,80 @@ npm run seed -- --force
 npm run dev
 ```
 
-Then open:
+Open `http://localhost:3000`. Admin login is available at `http://localhost:3000/admin/login`.
 
-```txt
-http://localhost:3000
-```
+## Production Deployment
 
-Admin login:
-
-```txt
-http://localhost:3000/admin/login
-```
-
-Default local credentials if environment variables are not set:
-
-```txt
-username: admin
-password: change-me-now
-```
-
-## Production Build
+Recommended deployment order on the Ubuntu VPS:
 
 ```bash
+npm ci
+npm run db:migrate
+npm test
 npm run build
 npm start
 ```
 
-## Server Data Storage
+For the first migration from JSON, stop application writes, back up both sources, run `db:import` and `db:verify`, then start the new build. Routine releases must omit `db:import`.
 
-Images are not stored under `public/uploads`. Admin uploads are saved under:
+The database-backed store supports multiple Node processes, but each process has its own connection pool. Set `DB_CONNECTION_LIMIT` so the total across all processes remains below MySQL's `max_connections`.
 
-```txt
-data/storage/uploads
+## Backup and Restore
+
+Because media is stored in the database, one `mysqldump` includes both records and uploaded files:
+
+```bash
+mysqldump -u ephata_app -p \
+  --single-transaction \
+  --quick \
+  --hex-blob \
+  --routines \
+  ephata_concepts > ephata-concepts-$(date +%F-%H%M).sql
 ```
 
-The `data/` directory is ignored by git and should be treated as server-side runtime data. Uploaded media is exposed only through the safe image route:
+Restore into an empty database:
 
-```txt
-/api/uploads/{folder}/{filename}
+```bash
+mysql -u ephata_app -p ephata_concepts < ephata-concepts-backup.sql
 ```
 
-Example:
+Test restores periodically. Keep encrypted off-server backups and apply a retention policy appropriate for enquiry and account data.
 
-```txt
-/api/uploads/portfolio/wedding-setup.webp
+## Rollback
+
+Before the first database cutover, retain:
+
+- A compressed copy of the complete legacy `data/` directory
+- The previous application release
+- A MySQL dump taken immediately before import
+
+If cutover validation fails, stop the new process, restore the previous release and its `data/` snapshot, and investigate against a copy of the database. The new runtime does not dual-write to JSON.
+
+## Security Notes
+
+- Never run the application with the MySQL root account.
+- Keep `.env`, `.env.local`, database dumps, and `data/` out of git.
+- Restrict production MySQL to localhost or a private network security group.
+- Use TLS when the application and database are on different hosts.
+- Rotate database and application secrets during production provisioning.
+- Back up before schema migrations and test restores.
+
+## Commands
+
+```bash
+npm run db:setup    # Provision a local database/user using admin credentials
+npm run db:migrate  # Apply pending schema migrations
+npm run db:import   # One-time import from legacy JSON and data/storage
+npm run db:verify   # Compare legacy source counts and media checksums
+npm run seed        # Seed starter content into an empty database
+npm test            # Run JavaScript smoke tests
+npm run build       # Create the production Next.js build
 ```
-
-The route validates paths and blocks traversal attempts such as `../../etc/passwd`.
-
-Allowed image types:
-
-- JPEG
-- PNG
-- WebP
-- SVG only for trusted brand assets
-
-Maximum upload size is 10 MB.
-
-## JSON Data Store
-
-Content lives beside media in the private `data/` directory:
-
-```txt
-data/services.json
-data/packages.json
-data/portfolio.json
-data/testimonials.json
-data/insights.json
-data/enquiries.json
-data/settings.json
-```
-
-Writes use a temporary file followed by rename for atomic replacement.
-
-Important production note: while JSON files and local media files are the active data store, run the app as a single process and back up `data/` separately. Avoid PM2 cluster mode or multi-instance writes until a cross-process file lock or database/CMS migration is added.
-
-Future migration note: `data/` is the MVP persistence boundary. The JSON collections should map cleanly to database tables/documents later, and `data/storage/uploads` can migrate to object storage without changing the public `/api/uploads/...` URL shape immediately.
-
-## Admin Features
-
-- Protected admin dashboard
-- Services CRUD
-- Packages CRUD
-- Portfolio CRUD
-- Testimonials CRUD
-- Insights CRUD
-- Enquiry review, status updates, and deletion
-- Site settings
-- Server-side image uploads
 
 ## Quality Checks
 
 ```bash
 npm test
+npm run db:verify
 npm run build
 ```
-
-`npm test` verifies the JavaScript-only constraint, upload path safety, enquiry validation, and key files.

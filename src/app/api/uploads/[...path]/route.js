@@ -1,6 +1,5 @@
-import { promises as fs } from "fs";
 import { NextResponse } from "next/server";
-import { contentTypeForPath, safeUploadPath } from "@/lib/uploads.js";
+import { readUploadedFile } from "@/lib/uploads.js";
 
 export const runtime = "nodejs";
 
@@ -9,11 +8,13 @@ export async function GET(_request, context) {
   const relativePath = (params.path || []).join("/");
 
   try {
-    const filePath = safeUploadPath(relativePath);
-    const file = await fs.readFile(/*turbopackIgnore: true*/ filePath);
-    return new NextResponse(file, {
+    const file = await readUploadedFile(relativePath);
+    if (!file) return NextResponse.json({ error: "Image not found" }, { status: 404 });
+    return new NextResponse(file.content, {
       headers: {
-        "Content-Type": contentTypeForPath(filePath),
+        "Content-Type": file.mimeType,
+        "Content-Length": String(file.size),
+        "ETag": `\"${file.sha256}\"`,
         "Cache-Control": "public, max-age=31536000, immutable"
       }
     });

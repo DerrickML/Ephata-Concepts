@@ -19,6 +19,7 @@ import { conversationTokenFor } from "../src/lib/enquiryThreads.js";
 import { relatedInsights, sortInsightsByDate } from "../src/lib/insights.js";
 import { normalizeRichTextDocument } from "../src/lib/richText.js";
 import { normalizeSocialLinks, resolveSocialLinks } from "../src/lib/socialLinks.js";
+import { indexedRecordFields, tableForCollection } from "../src/lib/databaseSchema.js";
 
 const root = process.cwd();
 
@@ -39,6 +40,9 @@ async function walk(dir, found = []) {
 assert.equal(slugify("Full Event Planning"), "full-event-planning");
 assert.equal(publicUploadUrl("portfolio/sample.webp"), "/api/uploads/portfolio/sample.webp");
 assert.throws(() => safeUploadPath("../etc/passwd"), /Invalid|Unsafe/);
+assert.equal(tableForCollection("services"), "services");
+assert.equal(indexedRecordFields({ categoryId: "planning", published: true }, 3).categoryId, "planning");
+assert.equal(indexedRecordFields({ categoryId: "planning", published: true }, 3).position, 3);
 
 const valid = validateEnquiry({
   fullName: "Example Client",
@@ -159,6 +163,8 @@ for (const file of [
   "src/app/api/uploads/[...path]/route.js",
   "src/app/api/enquiries/route.js",
   "src/lib/jsonStore.js",
+  "src/lib/databaseStore.js",
+  "src/lib/mediaStore.js",
   "src/lib/uploads.js",
   "src/lib/auth.js"
 ]) {

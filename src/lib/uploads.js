@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { IMAGE_MIME_TYPES, MAX_UPLOAD_BYTES, UPLOAD_FOLDERS } from "./constants.js";
+import { getMediaAsset, putMediaAsset, removeMediaAsset } from "./mediaStore.js";
 import { slugify } from "./slugify.js";
 import { normalizeUploadRelativePath, publicUploadUrl } from "./uploadUrls.js";
 
@@ -65,29 +66,22 @@ export async function saveUploadedFile(file, folder) {
     throw new Error("Image must be 10 MB or smaller");
   }
 
-  await ensureUploadDirs();
   const extension = extensionFor(file);
   const base = slugify(path.basename(file.name || "image", path.extname(file.name || ""))) || "image";
   const token = Math.random().toString(36).slice(2, 8);
   const filename = `${base}-${Date.now()}-${token}${extension}`;
   const relativePath = `${folder}/${filename}`;
-  const target = safeUploadPath(relativePath);
   const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(target, buffer);
+  await putMediaAsset({ storageKey: relativePath, mimeType: file.type, content: buffer });
   return relativePath;
 }
 
 export async function deleteUploadedFile(relativePath) {
-  const target = safeUploadPath(relativePath);
-  try {
-    await fs.unlink(target);
-    return true;
-  } catch (error) {
-    if (error.code === "ENOENT") {
-      return false;
-    }
-    throw error;
-  }
+  return removeMediaAsset(relativePath);
+}
+
+export async function readUploadedFile(relativePath) {
+  return getMediaAsset(relativePath);
 }
 
 export function contentTypeForPath(filePath) {
