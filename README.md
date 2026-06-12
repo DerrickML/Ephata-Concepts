@@ -153,6 +153,31 @@ Apply versioned schema migrations after every deployment:
 npm run db:migrate
 ```
 
+Run application commands as the normal deployment user, not with `sudo`. The database credentials are loaded from the project `.env.local` or `.env`; `sudo npm ...` can change the environment and create root-owned build or log files.
+
+Before importing, verify that the runtime credentials work independently:
+
+```bash
+mysql -h 127.0.0.1 -P 3306 -u ephata_app -p ephata_concepts \
+  -e "SELECT CURRENT_USER(), DATABASE();"
+```
+
+Enter the same password configured as `DB_PASSWORD`. If MariaDB rejects it, reset the account password as an administrator and make `.env.local` match:
+
+```sql
+sudo mariadb
+
+CREATE USER IF NOT EXISTS 'ephata_app'@'localhost'
+  IDENTIFIED BY 'replace-with-the-runtime-password';
+ALTER USER 'ephata_app'@'localhost'
+  IDENTIFIED BY 'replace-with-the-runtime-password';
+GRANT SELECT, INSERT, UPDATE, DELETE
+  ON ephata_concepts.*
+  TO 'ephata_app'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
 Applied versions are recorded in `schema_migrations`, so the command is safe to rerun. Do not edit an applied migration; add a new migration instead.
 
 The migration command uses `DB_MIGRATION_USER`; normal application requests use `DB_USER`. Remove migration credentials from the long-running process environment after deployment when your process manager supports deployment-only secrets.
