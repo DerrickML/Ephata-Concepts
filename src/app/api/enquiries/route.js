@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createItem } from "@/lib/jsonStore.js";
+import { publicRequestOrigin } from "@/lib/auth.js";
 import { validateEnquiry } from "@/lib/validators.js";
 import { addEnquiryMessage } from "@/lib/enquiryThreads.js";
 import { notifyEnquiryUsers } from "@/lib/notifications.js";
@@ -32,7 +33,7 @@ export async function POST(request) {
     recipientEmail: "",
     body: item.message
   });
-  await notifyEnquiryUsers({ enquiry: item, origin: request.nextUrl.origin, event: "new" }).catch(() => []);
+  await notifyEnquiryUsers({ enquiry: item, origin: publicRequestOrigin(request), event: "new" }).catch(() => []);
 
   return NextResponse.json(
     {

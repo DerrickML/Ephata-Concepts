@@ -3,6 +3,9 @@ import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import { hasPermission } from "./accessControl.js";
 import { resolveSession } from "./userStore.js";
+import { publicRequestOrigin, sameOrigin } from "./requestOrigin.js";
+
+export { publicRequestOrigin, sameOrigin };
 
 export const ADMIN_COOKIE_NAME = "ephata_admin_session";
 const SESSION_TTL_SECONDS = 60 * 60 * 8;
@@ -44,12 +47,6 @@ export async function authorizeAnyRequest(request, section, actions) {
     return { ok: false, response: forbidden() };
   }
   return { ok: true, admin };
-}
-
-export function sameOrigin(request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return true;
-  return origin === new URL(request.url).origin;
 }
 
 export function unauthorized() {

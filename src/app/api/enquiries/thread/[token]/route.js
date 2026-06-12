@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { publicRequestOrigin } from "@/lib/auth.js";
 import { addEnquiryMessage, getEnquiryByConversationToken, getEnquiryMessages } from "@/lib/enquiryThreads.js";
 import { notifyEnquiryUsers } from "@/lib/notifications.js";
 
@@ -26,6 +27,6 @@ export async function POST(request, context) {
   ).length;
   if (recentInboundCount >= 10) return NextResponse.json({ error: "Too many replies were submitted. Please try again later." }, { status: 429 });
   const message = await addEnquiryMessage({ enquiryId: enquiry.id, direction: "inbound", senderName: enquiry.fullName, senderEmail: enquiry.email, recipientEmail: "", body: content });
-  await notifyEnquiryUsers({ enquiry, origin: request.nextUrl.origin, event: "reply" }).catch(() => []);
+  await notifyEnquiryUsers({ enquiry, origin: publicRequestOrigin(request), event: "reply" }).catch(() => []);
   return NextResponse.json({ message }, { status: 201 });
 }

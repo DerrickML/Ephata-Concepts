@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { authorizeRequest, invalidOrigin, sameOrigin } from "@/lib/auth.js";
+import { authorizeRequest, invalidOrigin, publicRequestOrigin, sameOrigin } from "@/lib/auth.js";
 import { recordAudit } from "@/lib/audit.js";
 import { addEnquiryMessage, conversationTokenFor, updateEnquiryMessageDelivery } from "@/lib/enquiryThreads.js";
 import { readCollection } from "@/lib/jsonStore.js";
@@ -28,7 +28,7 @@ export async function POST(request, context) {
     actorId: auth.admin.id,
     deliveryStatus: "pending"
   });
-  const delivery = await sendEnquiryReply({ enquiry, message, conversationToken: conversationTokenFor(id), origin: request.nextUrl.origin });
+  const delivery = await sendEnquiryReply({ enquiry, message, conversationToken: conversationTokenFor(id), origin: publicRequestOrigin(request) });
   const updated = await updateEnquiryMessageDelivery(message.id, delivery?.status || "pending", delivery?.id || null);
   await recordAudit({ actor: auth.admin, action: "reply_enquiry", section: "enquiries", targetId: id, summary: `Replied to ${enquiry.fullName}` });
   return NextResponse.json({ message: updated, deliveryStatus: delivery?.status || "pending" }, { status: 201 });

@@ -20,6 +20,7 @@ import { relatedInsights, sortInsightsByDate } from "../src/lib/insights.js";
 import { normalizeRichTextDocument } from "../src/lib/richText.js";
 import { normalizeSocialLinks, resolveSocialLinks } from "../src/lib/socialLinks.js";
 import { indexedRecordFields, tableForCollection } from "../src/lib/databaseSchema.js";
+import { publicRequestOrigin, sameOrigin } from "../src/lib/requestOrigin.js";
 
 const root = process.cwd();
 
@@ -43,6 +44,29 @@ assert.throws(() => safeUploadPath("../etc/passwd"), /Invalid|Unsafe/);
 assert.equal(tableForCollection("services"), "services");
 assert.equal(indexedRecordFields({ categoryId: "planning", published: true }, 3).categoryId, "planning");
 assert.equal(indexedRecordFields({ categoryId: "planning", published: true }, 3).position, 3);
+
+const previousAppOrigin = process.env.APP_ORIGIN;
+const previousSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+process.env.APP_ORIGIN = "https://ephataconcepts.com";
+delete process.env.NEXT_PUBLIC_SITE_URL;
+const proxiedWriteRequest = new Request("http://127.0.0.1:3000/api/admin/services/example", {
+  method: "PUT",
+  headers: {
+    origin: "https://ephataconcepts.com",
+    "x-forwarded-host": "ephataconcepts.com",
+    "x-forwarded-proto": "https"
+  }
+});
+assert.equal(publicRequestOrigin(proxiedWriteRequest), "https://ephataconcepts.com");
+assert.equal(sameOrigin(proxiedWriteRequest), true);
+assert.equal(sameOrigin(new Request("http://127.0.0.1:3000/api/admin/services/example", {
+  method: "PUT",
+  headers: { origin: "https://attacker.example" }
+})), false);
+if (previousAppOrigin === undefined) delete process.env.APP_ORIGIN;
+else process.env.APP_ORIGIN = previousAppOrigin;
+if (previousSiteUrl === undefined) delete process.env.NEXT_PUBLIC_SITE_URL;
+else process.env.NEXT_PUBLIC_SITE_URL = previousSiteUrl;
 
 const valid = validateEnquiry({
   fullName: "Example Client",

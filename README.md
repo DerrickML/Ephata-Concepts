@@ -28,6 +28,8 @@ npm install
 Create `.env.local` from `.env.example`. The required database settings are:
 
 ```env
+NEXT_PUBLIC_SITE_URL=https://ephataconcepts.com
+APP_ORIGIN=https://ephataconcepts.com
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_NAME=ephata_concepts
@@ -38,6 +40,8 @@ DB_SSL=false
 DB_MIGRATION_USER=ephata_migrator
 DB_MIGRATION_PASSWORD=use-a-separate-long-random-password
 ```
+
+`APP_ORIGIN` is the authoritative origin for write-request CSRF validation. It must contain only the public scheme and host, with no path. `NEXT_PUBLIC_SITE_URL` should normally use the same value and is also used for metadata and public links.
 
 `DB_USER` has runtime read/write permissions only. `DB_MIGRATION_USER` can change the schema and should be injected only while running migrations. Keep `DB_ADMIN_USER` and `DB_ADMIN_PASSWORD` out of the production runtime environment; they are used only by the optional provisioning command.
 
@@ -231,6 +235,34 @@ Open `http://localhost:3000`. Admin login is available at `http://localhost:3000
 
 ## Production Deployment
 
+Set these exact public URL values on the Ephata production server:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://ephataconcepts.com
+APP_ORIGIN=https://ephataconcepts.com
+```
+
+The Nginx proxy location must preserve the public host and scheme:
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+```
+
+Validate and reload Nginx after changing its configuration:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
 Recommended deployment order on the Ubuntu VPS:
 
 ```bash
@@ -239,6 +271,13 @@ npm run db:migrate
 npm test
 npm run build
 npm start
+```
+
+When PM2 manages the process, restart it with the updated environment instead of running `npm start` separately:
+
+```bash
+pm2 restart ecosystem.config.cjs --update-env
+pm2 logs --lines 100
 ```
 
 For the first migration from JSON, stop application writes, back up both sources, run `db:import` and `db:verify`, then start the new build. Routine releases must omit `db:import`.

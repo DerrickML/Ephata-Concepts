@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { authorizeRequest, invalidOrigin, sameOrigin } from "@/lib/auth.js";
+import { authorizeRequest, invalidOrigin, publicRequestOrigin, sameOrigin } from "@/lib/auth.js";
 import { recordAudit } from "@/lib/audit.js";
 import { createUserAccount, listPublicUsers } from "@/lib/userStore.js";
 import { readCollection } from "@/lib/jsonStore.js";
@@ -47,8 +47,8 @@ export async function POST(request) {
       mustChangePassword: sendInvitation ? false : input.mustChangePassword
     });
     const invitation = sendInvitation
-      ? await sendAccountInvitation(user, request.nextUrl.origin)
-      : user.status === "active" ? await sendAccountCreatedNotice(user, request.nextUrl.origin) : null;
+      ? await sendAccountInvitation(user, publicRequestOrigin(request))
+      : user.status === "active" ? await sendAccountCreatedNotice(user, publicRequestOrigin(request)) : null;
     await recordAudit({ actor: auth.admin, action: "create_user", section: "users", targetId: user.id, summary: `Created account for ${user.name}` });
     return NextResponse.json({ user, invitationStatus: invitation?.status || null }, { status: 201 });
   } catch (error) {
