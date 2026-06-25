@@ -9,6 +9,11 @@ export const metadata = {
 export default async function AdminGalleryPage() {
   const config = getAdminCollectionConfig("galleryAlbums");
   const items = await readCollection(config.collection);
+  const rows = items.map((item) => ({
+    ...item,
+    imageCount: Array.isArray(item.images) ? item.images.length : 0,
+    videoCount: Array.isArray(item.videoLinks) ? item.videoLinks.length : 0
+  }));
 
   return (
     <AdminCollectionIndex
@@ -17,7 +22,7 @@ export default async function AdminGalleryPage() {
       title={config.title}
       description={config.description}
       columns={config.columns}
-      items={items}
+      items={rows}
       createHref={`${config.path}/new`}
       editPathBase={config.path}
     />

@@ -171,8 +171,8 @@ export const defaultColumns = {
   galleryAlbums: [
     { key: "title", label: "Album" },
     { key: "location", label: "Location" },
-    { key: "images", label: "Images", render: (row) => row.images?.length || 0 },
-    { key: "videoLinks", label: "Videos", render: (row) => row.videoLinks?.length || 0 }
+    { key: "imageCount", label: "Images" },
+    { key: "videoCount", label: "Videos" }
   ],
   testimonials: [
     { key: "clientName", label: "Client" },
