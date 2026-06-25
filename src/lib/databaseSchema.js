@@ -24,6 +24,7 @@ export const ARRAY_COLLECTION_TABLES = {
 export const OBJECT_COLLECTIONS = new Set([
   "settings",
   "emailSettings",
+  "homePage",
   "contactPage",
   "consultationPage"
 ]);
@@ -51,6 +52,7 @@ export const IMPORT_ORDER = [
   "accountInvitations",
   "settings",
   "emailSettings",
+  "homePage",
   "contactPage",
   "consultationPage"
 ];

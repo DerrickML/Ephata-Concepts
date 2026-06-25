@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarCheck, Globe2, Mail, ServerCog, Share2 } from "lucide-react";
+import { CalendarCheck, Globe2, Home, Mail, ServerCog, Share2 } from "lucide-react";
 import AdminPageContentForm from "@/forms/AdminPageContentForm.jsx";
 import AdminSettingsForm from "@/forms/AdminSettingsForm.jsx";
 import AdminEmailSettingsForm from "./AdminEmailSettingsForm.jsx";
@@ -24,6 +24,71 @@ const contactFields = [
   { name: "formTitle", label: "Form Title" },
   { name: "formIntro", label: "Form Intro", type: "textarea", rows: 3 },
   { name: "submitLabel", label: "Submit Button Label" }
+];
+
+const homeFields = [
+  { name: "heroTitle", label: "Hero Title" },
+  { name: "heroIntro", label: "Hero Intro", type: "textarea", rows: 3 },
+  { name: "heroPrimaryLabel", label: "Hero Primary CTA Label" },
+  { name: "heroPrimaryHref", label: "Hero Primary CTA Link" },
+  { name: "heroSecondaryLabel", label: "Hero Secondary CTA Label" },
+  { name: "heroSecondaryHref", label: "Hero Secondary CTA Link" },
+  { name: "heroNoteTitle", label: "Hero Note Title" },
+  { name: "heroNoteText", label: "Hero Note Text" },
+  {
+    name: "trustItems",
+    label: "Trust Strip Labels",
+    type: "list",
+    rows: 4,
+    help: "One short label per line."
+  },
+  { name: "aboutEyebrow", label: "About Eyebrow" },
+  { name: "aboutTitle", label: "About Title" },
+  { name: "aboutIntro", label: "About Intro", type: "textarea", rows: 3 },
+  { name: "aboutBody", label: "About Side Copy", type: "textarea", rows: 3 },
+  { name: "aboutLinkLabel", label: "About Link Label" },
+  { name: "servicesEyebrow", label: "Services Eyebrow" },
+  { name: "servicesTitle", label: "Services Title" },
+  { name: "servicesIntro", label: "Services Intro", type: "textarea", rows: 3 },
+  { name: "servicesLinkLabel", label: "Services Link Label" },
+  { name: "processEyebrow", label: "Process Eyebrow" },
+  { name: "processTitle", label: "Process Title" },
+  { name: "processIntro", label: "Process Intro", type: "textarea", rows: 3 },
+  {
+    name: "processItems",
+    label: "Process Steps",
+    type: "prep-list",
+    rows: 7,
+    help: "One step per line using: Step Title | Description"
+  },
+  { name: "statisticsEyebrow", label: "Statistics Eyebrow" },
+  { name: "statisticsTitle", label: "Statistics Title" },
+  { name: "statisticsIntro", label: "Statistics Intro", type: "textarea", rows: 3 },
+  {
+    name: "statisticsItems",
+    label: "Statistics",
+    type: "stats-list",
+    rows: 5,
+    help: "One statistic per line using: 200+ | Events Managed | Short description"
+  },
+  { name: "packagesEyebrow", label: "Packages Eyebrow" },
+  { name: "packagesTitle", label: "Packages Title" },
+  { name: "packagesIntro", label: "Packages Intro", type: "textarea", rows: 3 },
+  { name: "corporateEyebrow", label: "Corporate Eyebrow" },
+  { name: "corporateTitle", label: "Corporate Title" },
+  { name: "corporateIntro", label: "Corporate Intro", type: "textarea", rows: 3 },
+  { name: "corporateLinkLabel", label: "Corporate Link Label" },
+  { name: "portfolioEyebrow", label: "Portfolio Eyebrow" },
+  { name: "portfolioTitle", label: "Portfolio Title" },
+  { name: "portfolioIntro", label: "Portfolio Intro", type: "textarea", rows: 3 },
+  { name: "testimonialsEyebrow", label: "Testimonials Eyebrow" },
+  { name: "testimonialsTitle", label: "Testimonials Title" },
+  { name: "testimonialsIntro", label: "Testimonials Intro", type: "textarea", rows: 3 },
+  { name: "ctaEyebrow", label: "CTA Eyebrow" },
+  { name: "ctaTitle", label: "CTA Title" },
+  { name: "ctaBody", label: "CTA Body", type: "textarea", rows: 3 },
+  { name: "ctaButtonLabel", label: "CTA Button Label" },
+  { name: "ctaButtonHref", label: "CTA Button Link" }
 ];
 
 const consultationFields = [
@@ -64,6 +129,26 @@ export default function AdminSettingsHub() {
         description: "Manage social profiles, visibility, display order, and the icon used for each platform.",
         meta: "Shown in the footer, contact page, and consultation page.",
         content: <AdminSocialLinksForm />
+      },
+      {
+        id: "home",
+        icon: Home,
+        title: "Home Page",
+        eyebrow: "Public Page",
+        description: "Manage the homepage hero, section labels, process copy, statistics, and final CTA.",
+        meta: "Controls / homepage copy, trust strip, statistics, and CTA.",
+        publicHref: "/",
+        content: (
+          <AdminPageContentForm
+            eyebrow="Public Page"
+            title="Home Page"
+            description="Manage the homepage copy, statistics, and section prompts."
+            endpoint="/api/admin/home-page"
+            publicHref="/"
+            fields={homeFields}
+            embedded
+          />
+        )
       },
       {
         id: "email",

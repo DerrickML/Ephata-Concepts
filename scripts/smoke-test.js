@@ -130,6 +130,17 @@ const normalizedInsight = normalizeAdminPayload("insights", {
 assert.equal(normalizedInsight.categoryId, "planning-guides");
 assert.equal(validateAdminPayload("insights", normalizedInsight).ok, true);
 
+const normalizedHomePage = normalizeAdminPayload("homePage", {
+  heroTitle: "Graceful events.",
+  heroIntro: "Calm support for modern gatherings.",
+  ctaTitle: "Start with clarity.",
+  statisticsItems: "200+ | Events Managed | Coordinated with care\n50+ | Vendor Partners | Trusted delivery teams",
+  processItems: "Consultation | Clarify priorities"
+});
+assert.equal(normalizedHomePage.statisticsItems[0].value, "200+");
+assert.equal(normalizedHomePage.processItems[0].label, "Consultation");
+assert.equal(validateAdminPayload("homePage", normalizedHomePage).ok, true);
+
 const alignedRichText = normalizeRichTextDocument({
   type: "doc",
   content: [
@@ -189,6 +200,7 @@ for (const file of [
   "src/lib/jsonStore.js",
   "src/lib/databaseStore.js",
   "src/lib/mediaStore.js",
+  "src/lib/requestOrigin.js",
   "src/lib/uploads.js",
   "src/lib/auth.js"
 ]) {

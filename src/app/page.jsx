@@ -16,7 +16,7 @@ import { readCollection } from "@/lib/jsonStore.js";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [services, serviceCategories, packages, packageCategories, portfolio, portfolioCategories, testimonials, settings] = await Promise.all([
+  const [services, serviceCategories, packages, packageCategories, portfolio, portfolioCategories, testimonials, settings, homePage] = await Promise.all([
     readCollection("services"),
     readCollection("serviceCategories"),
     readCollection("packages"),
@@ -24,7 +24,8 @@ export default async function HomePage() {
     readCollection("portfolio"),
     readCollection("portfolioCategories"),
     readCollection("testimonials"),
-    readCollection("settings")
+    readCollection("settings"),
+    readCollection("homePage")
   ]);
 
   const visibleServices = publishedCategorizedItems(services, serviceCategories);
@@ -39,13 +40,18 @@ export default async function HomePage() {
     ...publishedTestimonials.filter((item) => !item.featured)
   ].slice(0, 6);
 
+  const trustItems = Array.isArray(homePage.trustItems) && homePage.trustItems.length
+    ? homePage.trustItems
+    : ["Weddings", "Corporate", "Retreats", "Celebrations"];
+  const statisticsItems = Array.isArray(homePage.statisticsItems) ? homePage.statisticsItems : [];
+
   return (
     <PageTransition>
-      <Hero settings={settings} />
+      <Hero settings={settings} homePage={homePage} />
       <section className="trust-strip">
         <div className="shell trust-grid">
-          {["Weddings", "Corporate", "Retreats", "Celebrations"].map((item) => (
-            <span key={item}>{item}</span>
+          {trustItems.map((item, index) => (
+            <span key={`${item}-${index}`}>{item}</span>
           ))}
         </div>
       </section>
@@ -53,25 +59,46 @@ export default async function HomePage() {
       <section className="section-pad">
         <div className="shell split-section">
           <SectionHeader
-            eyebrow="About Ephata"
-            title="Openings, elevated."
-            intro="Ephata means “be opened”: a calm move into your next moment."
+            eyebrow={homePage.aboutEyebrow}
+            title={homePage.aboutTitle}
+            intro={homePage.aboutIntro}
           />
           <div className="story-panel">
-            <p>Archway for arrival. Staircase for elevation. Calm hands for the details.</p>
+            <p>{homePage.aboutBody}</p>
             <TransitionLink className="text-link" href="/about">
-              About Ephata
+              {homePage.aboutLinkLabel}
             </TransitionLink>
           </div>
         </div>
       </section>
 
+      {statisticsItems.length ? (
+        <section className="section-pad stats-band">
+          <div className="shell">
+            <SectionHeader
+              eyebrow={homePage.statisticsEyebrow}
+              title={homePage.statisticsTitle}
+              intro={homePage.statisticsIntro}
+            />
+            <div className="stats-grid">
+              {statisticsItems.map((item, index) => (
+                <article className="stat-card" key={`${item.value}-${item.label}-${index}`}>
+                  <strong>{item.value}</strong>
+                  <h3>{item.label}</h3>
+                  {item.text ? <p>{item.text}</p> : null}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="section-pad muted-band">
         <div className="shell">
           <SectionHeader
-            eyebrow="Services"
-            title="Essential support."
-            intro="Plan. Coordinate. Host. Reflect."
+            eyebrow={homePage.servicesEyebrow}
+            title={homePage.servicesTitle}
+            intro={homePage.servicesIntro}
           />
           <div className="card-grid">
             {servicePreview.map((service) => (
@@ -79,7 +106,7 @@ export default async function HomePage() {
             ))}
           </div>
           <TransitionLink className="text-link section-link" href="/services">
-            All services
+            {homePage.servicesLinkLabel}
           </TransitionLink>
         </div>
       </section>
@@ -87,21 +114,21 @@ export default async function HomePage() {
       <section className="section-pad process-band">
         <div className="shell">
           <SectionHeader
-            eyebrow="Process"
-            title="Five calm steps."
-            intro="Clear enough to follow. Flexible enough for real events."
+            eyebrow={homePage.processEyebrow}
+            title={homePage.processTitle}
+            intro={homePage.processIntro}
             align="right"
           />
-          <ProcessSteps />
+          <ProcessSteps items={homePage.processItems} />
         </div>
       </section>
 
       <section className="section-pad">
         <div className="shell">
           <SectionHeader
-            eyebrow="Packages"
-            title="Simple starting points."
-            intro="Choose a package, then tailor the scope."
+            eyebrow={homePage.packagesEyebrow}
+            title={homePage.packagesTitle}
+            intro={homePage.packagesIntro}
           />
           <div className="card-grid">
             {packagePreview.map((item) => (
@@ -115,12 +142,12 @@ export default async function HomePage() {
         <div className="shell split-section corporate-feature">
           <div className="corporate-copy">
             <SectionHeader
-              eyebrow="Corporate"
-              title="Professional gatherings, lightly held."
-              intro="Launches, retreats, conferences, and team moments with clear flow."
+              eyebrow={homePage.corporateEyebrow}
+              title={homePage.corporateTitle}
+              intro={homePage.corporateIntro}
             />
             <TransitionLink className="text-link" href="/packages">
-              Corporate Packages
+              {homePage.corporateLinkLabel}
             </TransitionLink>
           </div>
           <ArchImage
@@ -134,9 +161,9 @@ export default async function HomePage() {
       <section className="section-pad navy-band">
         <div className="shell">
           <SectionHeader
-            eyebrow="Portfolio"
-            title="Recent moments."
-            intro="A concise look at coordinated gatherings."
+            eyebrow={homePage.portfolioEyebrow}
+            title={homePage.portfolioTitle}
+            intro={homePage.portfolioIntro}
           />
           <div className="card-grid">
             {portfolioPreview.length ? (
@@ -157,16 +184,22 @@ export default async function HomePage() {
       <section className="section-pad">
         <div className="shell">
           <SectionHeader
-            eyebrow="Client Words"
-            title="Kind words."
-            intro="Clients remember the calm."
+            eyebrow={homePage.testimonialsEyebrow}
+            title={homePage.testimonialsTitle}
+            intro={homePage.testimonialsIntro}
             align="right"
           />
           <TestimonialSlider items={testimonialPreview} />
         </div>
       </section>
 
-      <CTASection />
+      <CTASection
+        eyebrow={homePage.ctaEyebrow}
+        title={homePage.ctaTitle}
+        body={homePage.ctaBody}
+        buttonLabel={homePage.ctaButtonLabel}
+        buttonHref={homePage.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

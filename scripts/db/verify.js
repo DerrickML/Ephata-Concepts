@@ -12,6 +12,14 @@ const { readCollection } = await import("../../src/lib/databaseStore.js");
 const { getUploadsRoot } = await import("../../src/lib/uploads.js");
 
 const failures = [];
+const driftNotes = [];
+const VOLATILE_COLLECTIONS = new Set([
+  "sessions",
+  "auditLog",
+  "emailOutbox",
+  "passwordResetChallenges",
+  "accountInvitations"
+]);
 
 async function sourceCollection(name) {
   const config = COLLECTIONS[name];
@@ -41,7 +49,11 @@ async function main() {
     const [source, target] = await Promise.all([sourceCollection(name), readCollection(name)]);
     const sourceCount = Array.isArray(source) ? source.length : 1;
     const targetCount = Array.isArray(target) ? target.length : 1;
-    if (sourceCount !== targetCount) failures.push(`${name}: source=${sourceCount}, database=${targetCount}`);
+    if (sourceCount !== targetCount) {
+      const message = `${name}: source=${sourceCount}, database=${targetCount}`;
+      if (VOLATILE_COLLECTIONS.has(name)) driftNotes.push(message);
+      else failures.push(message);
+    }
     console.log(`${name}: ${targetCount} record(s)`);
   }
 
@@ -58,6 +70,11 @@ async function main() {
   }
   if (databaseMedia.size !== files.length) failures.push(`media count: source=${files.length}, database=${databaseMedia.size}`);
   console.log(`media_assets: ${databaseMedia.size} file(s)`);
+
+  if (driftNotes.length) {
+    console.log("Runtime collection drift noted:");
+    for (const note of driftNotes) console.log(`- ${note}`);
+  }
 
   if (failures.length) throw new Error(`Migration verification failed:\n- ${failures.join("\n- ")}`);
   console.log("Migration verification passed.");

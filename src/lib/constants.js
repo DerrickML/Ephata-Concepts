@@ -29,6 +29,7 @@ export const COLLECTIONS = {
   enquiryMessages: { file: "enquiryMessages.json", type: "array" },
   settings: { file: "settings.json", type: "object" },
   emailSettings: { file: "emailSettings.json", type: "object" },
+  homePage: { file: "homePage.json", type: "object" },
   contactPage: { file: "contactPage.json", type: "object" },
   consultationPage: { file: "consultationPage.json", type: "object" }
 };
@@ -129,6 +130,64 @@ export const DEFAULT_CONTACT_PAGE = {
   submitLabel: "Send Message"
 };
 
+export const DEFAULT_HOME_PAGE = {
+  heroTitle: "Graceful events. Calmly handled.",
+  heroIntro:
+    "Planning, coordination, and guest experience support for weddings and professional gatherings.",
+  heroPrimaryLabel: "Book a Consultation",
+  heroPrimaryHref: "/book-consultation",
+  heroSecondaryLabel: "Explore Our Services",
+  heroSecondaryHref: "/services",
+  heroNoteTitle: "Opened beautifully.",
+  heroNoteText: "Archway clarity. Staircase momentum.",
+  trustItems: ["Weddings", "Corporate", "Retreats", "Celebrations"],
+  aboutEyebrow: "About Ephata",
+  aboutTitle: "Openings, elevated.",
+  aboutIntro: 'Ephata means "be opened": a calm move into your next moment.',
+  aboutBody: "Archway for arrival. Staircase for elevation. Calm hands for the details.",
+  aboutLinkLabel: "About Ephata",
+  servicesEyebrow: "Services",
+  servicesTitle: "Essential support.",
+  servicesIntro: "Plan. Coordinate. Host. Reflect.",
+  servicesLinkLabel: "All services",
+  processEyebrow: "Process",
+  processTitle: "Five calm steps.",
+  processIntro: "Clear enough to follow. Flexible enough for real events.",
+  processItems: [
+    { label: "Consultation", text: "Clarify the vision, define key milestones, and align on budget scope." },
+    { label: "Concept", text: "Curate design themes, select aesthetics, and align brand style guides." },
+    { label: "Planning", text: "Secure vendor contracts, manage details, and organize guest lists." },
+    { label: "Execution", text: "Direct layout flows, verify timelines, and maintain a calm venue day." },
+    { label: "Reflection", text: "Deliver final reporting, close finances, and review success metrics." }
+  ],
+  statisticsEyebrow: "Event Confidence",
+  statisticsTitle: "Numbers with calm behind them.",
+  statisticsIntro: "A quick view of the work, care, and coordination behind each gathering.",
+  statisticsItems: [
+    { value: "200+", label: "Events Managed", text: "Weddings, retreats, launches, and professional gatherings." },
+    { value: "50+", label: "Vendor Partners", text: "Trusted teams coordinated around each event brief." },
+    { value: "8+", label: "Years of Practice", text: "Planning rhythm built through real event delivery." }
+  ],
+  packagesEyebrow: "Packages",
+  packagesTitle: "Simple starting points.",
+  packagesIntro: "Choose a package, then tailor the scope.",
+  corporateEyebrow: "Corporate",
+  corporateTitle: "Professional gatherings, lightly held.",
+  corporateIntro: "Launches, retreats, conferences, and team moments with clear flow.",
+  corporateLinkLabel: "Corporate Packages",
+  portfolioEyebrow: "Portfolio",
+  portfolioTitle: "Recent moments.",
+  portfolioIntro: "A concise look at coordinated gatherings.",
+  testimonialsEyebrow: "Client Words",
+  testimonialsTitle: "Kind words.",
+  testimonialsIntro: "Clients remember the calm.",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
 export const DEFAULT_CONSULTATION_PAGE = {
   heroTitle: "Plan a calmer first call.",
   heroIntro:
@@ -166,5 +225,6 @@ export const DEFAULT_EMAIL_SETTINGS = {
 
 COLLECTIONS.settings.default = DEFAULT_SETTINGS;
 COLLECTIONS.emailSettings.default = DEFAULT_EMAIL_SETTINGS;
+COLLECTIONS.homePage.default = DEFAULT_HOME_PAGE;
 COLLECTIONS.contactPage.default = DEFAULT_CONTACT_PAGE;
 COLLECTIONS.consultationPage.default = DEFAULT_CONSULTATION_PAGE;

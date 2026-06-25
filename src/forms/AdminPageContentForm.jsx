@@ -12,6 +12,11 @@ function valueToField(field, value) {
       ? value.map((item) => `${item.label || ""} | ${item.text || ""}`).join("\n")
       : "";
   }
+  if (field.type === "stats-list") {
+    return Array.isArray(value)
+      ? value.map((item) => `${item.value || ""} | ${item.label || ""} | ${item.text || ""}`).join("\n")
+      : "";
+  }
   return value || "";
 }
 
@@ -33,6 +38,19 @@ function fieldToValue(field, value) {
         };
       })
       .filter((item) => item.label || item.text);
+  }
+  if (field.type === "stats-list") {
+    return String(value || "")
+      .split("\n")
+      .map((line) => {
+        const [statValue, label, ...text] = line.split("|");
+        return {
+          value: String(statValue || "").trim(),
+          label: String(label || "").trim(),
+          text: text.join("|").trim()
+        };
+      })
+      .filter((item) => item.value || item.label || item.text);
   }
   return value;
 }
@@ -122,7 +140,7 @@ export default function AdminPageContentForm({
               <div className="admin-field" key={field.name}>
                 <label htmlFor={`page-${field.name}`}>{field.label}</label>
                 {field.help ? <p className="admin-field-help">{field.help}</p> : null}
-                {field.type === "textarea" || field.type === "list" || field.type === "prep-list" ? (
+                {field.type === "textarea" || field.type === "list" || field.type === "prep-list" || field.type === "stats-list" ? (
                   <textarea
                     id={`page-${field.name}`}
                     name={field.name}

@@ -21,14 +21,15 @@ const steps = [
   }
 ];
 
-export default function ProcessSteps() {
+export default function ProcessSteps({ items = steps }) {
+  const visibleItems = Array.isArray(items) && items.length ? items : steps;
   return (
     <ol className="process-steps">
-      {steps.map((step, index) => (
-        <li key={step.title}>
+      {visibleItems.map((step, index) => (
+        <li key={`${step.label || step.title}-${index}`}>
           <span>{String(index + 1).padStart(2, "0")}</span>
-          <h3>{step.title}</h3>
-          <p>{step.desc}</p>
+          <h3>{step.label || step.title}</h3>
+          <p>{step.text || step.desc}</p>
         </li>
       ))}
     </ol>

@@ -202,7 +202,7 @@ npm run db:verify
 
 `db:import` is idempotent for the same source snapshot, but it synchronizes database collections to those files. Do not run it during routine deployments after users have started editing database content.
 
-`db:verify` compares every legacy collection count and validates every imported media file by byte length and SHA-256 checksum.
+`db:verify` compares every legacy collection count and validates every imported media file by byte length and SHA-256 checksum. Runtime collections such as sessions, audit logs, email outbox entries, reset challenges, and account invitations can change during normal admin use; count drift in those collections is reported as a note instead of failing the verification.
 
 For a new installation without legacy data, apply migrations and seed starter content instead:
 
@@ -224,6 +224,30 @@ Public URLs remain stable:
 The route reads the BLOB from MySQL and returns immutable caching headers and an ETag. Remote image URLs and static files under `public/` continue to work.
 
 The application upload limit remains 10 MB. Keeping `max_allowed_packet` at 32 MB provides headroom for prepared-statement overhead and future metadata.
+
+## Admin Managed Public Pages
+
+The Settings area is the central editor for public page copy. It currently manages:
+
+- Site-wide identity, contact details, logos, and fallback visuals
+- Home page hero copy, trust strip labels, section prompts, process steps, statistics numbers, and final CTA
+- Social links shown in the footer, contact page, and consultation page
+- Contact page copy and form labels
+- Consultation page copy, preparation prompts, and form labels
+- SMTP and email delivery settings
+
+Home page statistics are edited under `Admin > Settings > Home Page` using:
+
+```txt
+Value | Label | Description
+```
+
+Example:
+
+```txt
+200+ | Events Managed | Weddings, retreats, launches, and professional gatherings.
+50+ | Vendor Partners | Trusted teams coordinated around each event brief.
+```
 
 ## Development
 

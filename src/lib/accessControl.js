@@ -26,6 +26,7 @@ export const COLLECTION_SECTION = {
   teamMembers: "team",
   enquiries: "enquiries",
   settings: "settings",
+  homePage: "settings",
   contactPage: "settings",
   consultationPage: "settings",
   users: "users",

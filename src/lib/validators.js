@@ -86,6 +86,37 @@ function normalizePrepItems(value) {
     .filter((entry) => entry.label || entry.text);
 }
 
+function normalizeStatsItems(value) {
+  if (Array.isArray(value)) {
+    return value
+      .map((entry) => ({
+        value: cleanString(entry?.value, 30),
+        label: cleanString(entry?.label, 90),
+        text: cleanString(entry?.text, 220)
+      }))
+      .filter((entry) => entry.value || entry.label || entry.text);
+  }
+
+  return String(value || "")
+    .split("\n")
+    .map((entry) => {
+      const [value, label, ...textParts] = entry.split("|");
+      return {
+        value: cleanString(value, 30),
+        label: cleanString(label, 90),
+        text: cleanString(textParts.join("|"), 220)
+      };
+    })
+    .filter((entry) => entry.value || entry.label || entry.text);
+}
+
+function normalizeInternalHref(value, fallback = "/") {
+  const input = cleanString(value, 300);
+  if (!input) return fallback;
+  if (!input.startsWith("/") || input.startsWith("//") || input.includes("..")) return fallback;
+  return input;
+}
+
 export function validateEnquiry(input) {
   const data = {
     fullName: cleanString(input.fullName, 120),
@@ -217,6 +248,55 @@ export function normalizeAdminPayload(collection, input) {
     };
   }
 
+  if (collection === "homePage") {
+    return {
+      heroTitle: cleanString(input.heroTitle, 160),
+      heroIntro: cleanMultiline(input.heroIntro, 500),
+      heroPrimaryLabel: cleanString(input.heroPrimaryLabel, 80),
+      heroPrimaryHref: normalizeInternalHref(input.heroPrimaryHref, "/book-consultation"),
+      heroSecondaryLabel: cleanString(input.heroSecondaryLabel, 80),
+      heroSecondaryHref: normalizeInternalHref(input.heroSecondaryHref, "/services"),
+      heroNoteTitle: cleanString(input.heroNoteTitle, 100),
+      heroNoteText: cleanString(input.heroNoteText, 160),
+      trustItems: normalizeList(input.trustItems, 80).slice(0, 8),
+      aboutEyebrow: cleanString(input.aboutEyebrow, 80),
+      aboutTitle: cleanString(input.aboutTitle, 140),
+      aboutIntro: cleanMultiline(input.aboutIntro, 500),
+      aboutBody: cleanMultiline(input.aboutBody, 700),
+      aboutLinkLabel: cleanString(input.aboutLinkLabel, 80),
+      servicesEyebrow: cleanString(input.servicesEyebrow, 80),
+      servicesTitle: cleanString(input.servicesTitle, 140),
+      servicesIntro: cleanMultiline(input.servicesIntro, 500),
+      servicesLinkLabel: cleanString(input.servicesLinkLabel, 80),
+      processEyebrow: cleanString(input.processEyebrow, 80),
+      processTitle: cleanString(input.processTitle, 140),
+      processIntro: cleanMultiline(input.processIntro, 500),
+      processItems: normalizePrepItems(input.processItems).slice(0, 8),
+      statisticsEyebrow: cleanString(input.statisticsEyebrow, 80),
+      statisticsTitle: cleanString(input.statisticsTitle, 140),
+      statisticsIntro: cleanMultiline(input.statisticsIntro, 500),
+      statisticsItems: normalizeStatsItems(input.statisticsItems).slice(0, 6),
+      packagesEyebrow: cleanString(input.packagesEyebrow, 80),
+      packagesTitle: cleanString(input.packagesTitle, 140),
+      packagesIntro: cleanMultiline(input.packagesIntro, 500),
+      corporateEyebrow: cleanString(input.corporateEyebrow, 80),
+      corporateTitle: cleanString(input.corporateTitle, 140),
+      corporateIntro: cleanMultiline(input.corporateIntro, 500),
+      corporateLinkLabel: cleanString(input.corporateLinkLabel, 80),
+      portfolioEyebrow: cleanString(input.portfolioEyebrow, 80),
+      portfolioTitle: cleanString(input.portfolioTitle, 140),
+      portfolioIntro: cleanMultiline(input.portfolioIntro, 500),
+      testimonialsEyebrow: cleanString(input.testimonialsEyebrow, 80),
+      testimonialsTitle: cleanString(input.testimonialsTitle, 140),
+      testimonialsIntro: cleanMultiline(input.testimonialsIntro, 500),
+      ctaEyebrow: cleanString(input.ctaEyebrow, 80),
+      ctaTitle: cleanString(input.ctaTitle, 140),
+      ctaBody: cleanMultiline(input.ctaBody, 500),
+      ctaButtonLabel: cleanString(input.ctaButtonLabel, 80),
+      ctaButtonHref: normalizeInternalHref(input.ctaButtonHref, "/book-consultation")
+    };
+  }
+
   if (collection === "contactPage") {
     return {
       heroTitle: cleanString(input.heroTitle, 160),
@@ -271,6 +351,9 @@ export function validateAdminPayload(collection, payload) {
   }
   if (collection === "teamMembers" && (!payload.name || !payload.role || !payload.categoryId)) {
     errors.name = "Name, role, and category are required.";
+  }
+  if (collection === "homePage" && (!payload.heroTitle || !payload.heroIntro || !payload.ctaTitle)) {
+    errors.heroTitle = "Hero title, hero intro, and CTA title are required.";
   }
   if (collection === "contactPage" && (!payload.heroTitle || !payload.formTitle)) {
     errors.heroTitle = "Hero title and form title are required.";

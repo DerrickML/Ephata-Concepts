@@ -1,5 +1,5 @@
 import { readCollection, writeCollection } from "../src/lib/jsonStore.js";
-import { DEFAULT_SETTINGS } from "../src/lib/constants.js";
+import { DEFAULT_HOME_PAGE, DEFAULT_SETTINGS } from "../src/lib/constants.js";
 import { createUncategorizedCategory } from "../src/lib/contentCategories.js";
 
 const force = process.argv.includes("--force");
@@ -530,6 +530,17 @@ async function main() {
     console.log("Seeded settings.");
   } else {
     console.log("Skipped settings; existing data found. Use --force to overwrite.");
+  }
+
+  const currentHomePage = await readCollection("homePage");
+  if (force || !currentHomePage.updatedAt) {
+    await writeCollection("homePage", {
+      ...DEFAULT_HOME_PAGE,
+      updatedAt: now
+    });
+    console.log("Seeded home page.");
+  } else {
+    console.log("Skipped home page; existing data found. Use --force to overwrite.");
   }
 
   const enquiries = await readCollection("enquiries");
