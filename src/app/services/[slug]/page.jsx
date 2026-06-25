@@ -21,8 +21,11 @@ export async function generateMetadata({ params }) {
 
 export default async function ServiceDetailPage({ params }) {
   const { slug } = await params;
-  const rawService = await getItemBySlug("services", slug);
-  const categories = await readCollection("serviceCategories");
+  const [rawService, categories, page] = await Promise.all([
+    getItemBySlug("services", slug),
+    readCollection("serviceCategories"),
+    readCollection("servicesPage")
+  ]);
   const service = rawService ? publishedCategorizedItems([rawService], categories)[0] : null;
   if (!service) notFound();
 
@@ -32,12 +35,12 @@ export default async function ServiceDetailPage({ params }) {
       <section className="section-pad">
         <div className="shell split-section">
           <div className="narrow-copy">
-            <p className="price-line">{service.rate || "Custom Quote"}</p>
-            <p>Use it as focused support, or fold it into a wider planning package.</p>
+            <p className="price-line">{service.rate || page.fallbackRateLabel}</p>
+            <p>{page.detailSupportText}</p>
             <div className="button-row">
-              <ButtonLink href="/book-consultation">Book a Consultation</ButtonLink>
-              <ButtonLink href="/services" variant="secondary">
-                Back to Services
+              <ButtonLink href={page.detailPrimaryHref}>{page.detailPrimaryLabel}</ButtonLink>
+              <ButtonLink href={page.detailBackHref} variant="secondary">
+                {page.detailBackLabel}
               </ButtonLink>
             </div>
           </div>
@@ -46,7 +49,13 @@ export default async function ServiceDetailPage({ params }) {
           </ViewTransition>
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

@@ -30,6 +30,13 @@ export const COLLECTIONS = {
   settings: { file: "settings.json", type: "object" },
   emailSettings: { file: "emailSettings.json", type: "object" },
   homePage: { file: "homePage.json", type: "object" },
+  aboutPage: { file: "aboutPage.json", type: "object" },
+  servicesPage: { file: "servicesPage.json", type: "object" },
+  packagesPage: { file: "packagesPage.json", type: "object" },
+  portfolioPage: { file: "portfolioPage.json", type: "object" },
+  testimonialsPage: { file: "testimonialsPage.json", type: "object" },
+  insightsPage: { file: "insightsPage.json", type: "object" },
+  teamPage: { file: "teamPage.json", type: "object" },
   contactPage: { file: "contactPage.json", type: "object" },
   consultationPage: { file: "consultationPage.json", type: "object" }
 };
@@ -188,6 +195,127 @@ export const DEFAULT_HOME_PAGE = {
   ctaButtonHref: "/book-consultation"
 };
 
+export const DEFAULT_ABOUT_PAGE = {
+  pageLabel: "About",
+  heroTitle: "A calm opening.",
+  heroIntro: "Events held with grace, order, and care.",
+  storyEyebrow: "Brand Story",
+  storyTitle: 'Ephata means "be opened".',
+  storyIntro: "An opening into a new stage. A staircase into what comes next.",
+  storyBody: "We plan with warmth, structure, and a steady eye on the guest experience.",
+  missionEyebrow: "Mission",
+  missionTitle: "Clear. Accountable. Beautifully held.",
+  missionIntro: "We protect the experience and keep decisions connected to the client's priorities.",
+  valuesItems: [
+    { label: "Excellence", text: "We plan with care, refine the details, and aim to get it right the first time." },
+    { label: "Timely Delivery", text: "We respect time, timelines, and the flow of every event." },
+    { label: "Accountability", text: "We take ownership of the process and communicate clearly from planning to execution." }
+  ],
+  teamEyebrow: "Team",
+  teamTitle: "Steady hands.",
+  teamIntro: "Meet the people shaping the calm behind each event.",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
+export const DEFAULT_SERVICES_PAGE = {
+  pageLabel: "Services",
+  heroTitle: "Support that composes the day.",
+  heroIntro: "Planning, coordination, guest flow, vendors, content, and reflection.",
+  categoryEyebrow: "Service Category",
+  categoryIntro: "Standalone support or part of a tailored package.",
+  emptyTitle: "No services published yet",
+  emptyMessage: "Services added in the admin panel will appear here.",
+  detailSupportText: "Use it as focused support, or fold it into a wider planning package.",
+  detailPrimaryLabel: "Book a Consultation",
+  detailPrimaryHref: "/book-consultation",
+  detailBackLabel: "Back to Services",
+  detailBackHref: "/services",
+  fallbackRateLabel: "Custom Quote",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
+export const DEFAULT_PACKAGES_PAGE = {
+  pageLabel: "Packages",
+  heroTitle: "Packages with room to breathe.",
+  heroIntro: "Start clear. Shape the scope after the consultation.",
+  categoryEyebrow: "Package Group",
+  categoryIntro: "Simple starting points. Flexible scope.",
+  emptyTitle: "No packages published yet",
+  emptyMessage: "",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
+export const DEFAULT_PORTFOLIO_PAGE = {
+  pageLabel: "Portfolio",
+  heroTitle: "Quietly composed work.",
+  heroIntro: "Weddings, gatherings, retreats, and professional moments.",
+  emptyTitle: "No portfolio items published yet",
+  emptyMessage: "",
+  detailSupportText: "Planning structure, guest flow, vendor clarity, and a composed event day.",
+  detailPrimaryLabel: "Plan a Similar Event",
+  detailPrimaryHref: "/book-consultation",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
+export const DEFAULT_TESTIMONIALS_PAGE = {
+  pageLabel: "Testimonials",
+  heroTitle: "Clients remember the calm.",
+  heroIntro: "Short notes from people who trusted us with the details.",
+  emptyTitle: "No testimonials published yet",
+  emptyMessage: "",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
+export const DEFAULT_INSIGHTS_PAGE = {
+  pageLabel: "Insights",
+  heroTitle: "Notes for calmer events.",
+  heroIntro: "Practical planning guidance, kept brief.",
+  emptyTitle: "No insights published yet",
+  emptyMessage: "",
+  relatedEyebrow: "Continue Reading",
+  relatedTitle: "Related insights.",
+  relatedIntro: "Selected by shared topics and category.",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
+export const DEFAULT_TEAM_PAGE = {
+  pageLabel: "Team",
+  heroTitle: "People behind the calm.",
+  heroIntro: "A focused team for planning, coordination, and guest experience.",
+  categoryEyebrow: "Team Category",
+  emptyTitle: "Team details are coming soon.",
+  emptyMessage: "Check back for the full Ephata Concepts team.",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
 export const DEFAULT_CONSULTATION_PAGE = {
   heroTitle: "Plan a calmer first call.",
   heroIntro:
@@ -226,5 +354,12 @@ export const DEFAULT_EMAIL_SETTINGS = {
 COLLECTIONS.settings.default = DEFAULT_SETTINGS;
 COLLECTIONS.emailSettings.default = DEFAULT_EMAIL_SETTINGS;
 COLLECTIONS.homePage.default = DEFAULT_HOME_PAGE;
+COLLECTIONS.aboutPage.default = DEFAULT_ABOUT_PAGE;
+COLLECTIONS.servicesPage.default = DEFAULT_SERVICES_PAGE;
+COLLECTIONS.packagesPage.default = DEFAULT_PACKAGES_PAGE;
+COLLECTIONS.portfolioPage.default = DEFAULT_PORTFOLIO_PAGE;
+COLLECTIONS.testimonialsPage.default = DEFAULT_TESTIMONIALS_PAGE;
+COLLECTIONS.insightsPage.default = DEFAULT_INSIGHTS_PAGE;
+COLLECTIONS.teamPage.default = DEFAULT_TEAM_PAGE;
 COLLECTIONS.contactPage.default = DEFAULT_CONTACT_PAGE;
 COLLECTIONS.consultationPage.default = DEFAULT_CONSULTATION_PAGE;

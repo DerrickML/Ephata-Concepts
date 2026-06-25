@@ -231,6 +231,13 @@ The Settings area is the central editor for public page copy. It currently manag
 
 - Site-wide identity, contact details, logos, and fallback visuals
 - Home page hero copy, trust strip labels, section prompts, process steps, statistics numbers, and final CTA
+- About page hero, brand story, mission, values, team prompt, and CTA
+- Services page hero, category helper copy, empty state, service detail helper copy, and CTA
+- Packages page hero, category helper copy, empty state, and CTA
+- Portfolio page hero, empty state, portfolio detail helper copy, and CTA
+- Testimonials page hero, empty state, and CTA
+- Insights page hero, empty state, related insight section labels, and CTA
+- Team page hero, category helper label, empty state, and CTA
 - Social links shown in the footer, contact page, and consultation page
 - Contact page copy and form labels
 - Consultation page copy, preparation prompts, and form labels

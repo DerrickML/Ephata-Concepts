@@ -3186,6 +3186,8 @@ svg {
   top: 1.25rem;
   display: grid;
   gap: 0.7rem;
+  max-height: calc(100vh - 2.5rem);
+  overflow-y: auto;
   padding: 0.8rem;
 }
 
@@ -3923,6 +3925,8 @@ svg {
   .settings-nav-card {
     position: static;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-height: none;
+    overflow-y: visible;
   }
 
   .social-settings-row {

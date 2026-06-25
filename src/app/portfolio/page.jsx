@@ -9,25 +9,28 @@ import { readCollection } from "@/lib/jsonStore.js";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Portfolio",
-  description:
-    "Explore weddings, corporate functions, retreats, and celebrations coordinated by Ephata Concepts."
-};
+export async function generateMetadata() {
+  const page = await readCollection("portfolioPage");
+  return {
+    title: page.pageLabel || "Portfolio",
+    description: page.heroIntro
+  };
+}
 
 export default async function PortfolioPage() {
-  const [portfolio, categories] = await Promise.all([
+  const [portfolio, categories, page] = await Promise.all([
     readCollection("portfolio"),
-    readCollection("portfolioCategories")
+    readCollection("portfolioCategories"),
+    readCollection("portfolioPage")
   ]);
   const items = publishedCategorizedItems(portfolio, categories);
 
   return (
     <PageTransition>
       <PageHeader
-        label="Portfolio"
-        title="Quietly composed work."
-        intro="Weddings, gatherings, retreats, and professional moments."
+        label={page.pageLabel}
+        title={page.heroTitle}
+        intro={page.heroIntro}
       />
       <section className="section-pad">
         <div className="shell">
@@ -40,11 +43,17 @@ export default async function PortfolioPage() {
               ))}
             </div>
           ) : (
-            <EmptyState title="No portfolio items published yet" />
+            <EmptyState title={page.emptyTitle} message={page.emptyMessage} />
           )}
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

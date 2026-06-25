@@ -1,7 +1,21 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarCheck, Globe2, Home, Mail, ServerCog, Share2 } from "lucide-react";
+import {
+  CalendarCheck,
+  Globe2,
+  Home,
+  Images,
+  Info,
+  ListChecks,
+  Mail,
+  MessageSquareQuote,
+  Newspaper,
+  Package,
+  ServerCog,
+  Share2,
+  UsersRound
+} from "lucide-react";
 import AdminPageContentForm from "@/forms/AdminPageContentForm.jsx";
 import AdminSettingsForm from "@/forms/AdminSettingsForm.jsx";
 import AdminEmailSettingsForm from "./AdminEmailSettingsForm.jsx";
@@ -91,6 +105,100 @@ const homeFields = [
   { name: "ctaButtonHref", label: "CTA Button Link" }
 ];
 
+const pageHeroFields = [
+  { name: "pageLabel", label: "Page Label" },
+  { name: "heroTitle", label: "Hero Title" },
+  { name: "heroIntro", label: "Hero Intro", type: "textarea", rows: 3 }
+];
+
+const ctaFields = [
+  { name: "ctaEyebrow", label: "CTA Eyebrow" },
+  { name: "ctaTitle", label: "CTA Title" },
+  { name: "ctaBody", label: "CTA Body", type: "textarea", rows: 3 },
+  { name: "ctaButtonLabel", label: "CTA Button Label" },
+  { name: "ctaButtonHref", label: "CTA Button Link" }
+];
+
+const emptyStateFields = [
+  { name: "emptyTitle", label: "Empty State Title" },
+  { name: "emptyMessage", label: "Empty State Message", type: "textarea", rows: 2 }
+];
+
+const aboutFields = [
+  ...pageHeroFields,
+  { name: "storyEyebrow", label: "Story Eyebrow" },
+  { name: "storyTitle", label: "Story Title" },
+  { name: "storyIntro", label: "Story Intro", type: "textarea", rows: 3 },
+  { name: "storyBody", label: "Story Body", type: "textarea", rows: 3 },
+  { name: "missionEyebrow", label: "Mission Eyebrow" },
+  { name: "missionTitle", label: "Mission Title" },
+  { name: "missionIntro", label: "Mission Intro", type: "textarea", rows: 3 },
+  {
+    name: "valuesItems",
+    label: "Values",
+    type: "prep-list",
+    rows: 4,
+    help: "One value per line using: Value Title | Description"
+  },
+  { name: "teamEyebrow", label: "Team Eyebrow" },
+  { name: "teamTitle", label: "Team Title" },
+  { name: "teamIntro", label: "Team Intro", type: "textarea", rows: 3 },
+  ...ctaFields
+];
+
+const servicesFields = [
+  ...pageHeroFields,
+  { name: "categoryEyebrow", label: "Category Eyebrow" },
+  { name: "categoryIntro", label: "Category Intro", type: "textarea", rows: 3 },
+  ...emptyStateFields,
+  { name: "detailSupportText", label: "Detail Page Support Text", type: "textarea", rows: 3 },
+  { name: "detailPrimaryLabel", label: "Detail Primary Button Label" },
+  { name: "detailPrimaryHref", label: "Detail Primary Button Link" },
+  { name: "detailBackLabel", label: "Detail Back Button Label" },
+  { name: "detailBackHref", label: "Detail Back Button Link" },
+  { name: "fallbackRateLabel", label: "Fallback Rate Label" },
+  ...ctaFields
+];
+
+const packagesFields = [
+  ...pageHeroFields,
+  { name: "categoryEyebrow", label: "Category Eyebrow" },
+  { name: "categoryIntro", label: "Category Intro", type: "textarea", rows: 3 },
+  ...emptyStateFields,
+  ...ctaFields
+];
+
+const portfolioFields = [
+  ...pageHeroFields,
+  ...emptyStateFields,
+  { name: "detailSupportText", label: "Detail Page Support Text", type: "textarea", rows: 3 },
+  { name: "detailPrimaryLabel", label: "Detail Primary Button Label" },
+  { name: "detailPrimaryHref", label: "Detail Primary Button Link" },
+  ...ctaFields
+];
+
+const testimonialsFields = [
+  ...pageHeroFields,
+  ...emptyStateFields,
+  ...ctaFields
+];
+
+const insightsFields = [
+  ...pageHeroFields,
+  ...emptyStateFields,
+  { name: "relatedEyebrow", label: "Related Section Eyebrow" },
+  { name: "relatedTitle", label: "Related Section Title" },
+  { name: "relatedIntro", label: "Related Section Intro", type: "textarea", rows: 3 },
+  ...ctaFields
+];
+
+const teamFields = [
+  ...pageHeroFields,
+  { name: "categoryEyebrow", label: "Category Eyebrow" },
+  ...emptyStateFields,
+  ...ctaFields
+];
+
 const consultationFields = [
   { name: "heroTitle", label: "Hero Title" },
   { name: "heroIntro", label: "Hero Intro", type: "textarea", rows: 3 },
@@ -108,6 +216,29 @@ const consultationFields = [
   { name: "formIntro", label: "Form Intro", type: "textarea", rows: 3 },
   { name: "submitLabel", label: "Submit Button Label" }
 ];
+
+function publicPageSection({ id, icon, title, description, meta, publicHref, fields }) {
+  return {
+    id,
+    icon,
+    title,
+    eyebrow: "Public Page",
+    description,
+    meta,
+    publicHref,
+    content: (
+      <AdminPageContentForm
+        eyebrow="Public Page"
+        title={title}
+        description={description}
+        endpoint={`/api/admin/public-pages/${id}`}
+        publicHref={publicHref}
+        fields={fields}
+        embedded
+      />
+    )
+  };
+}
 
 export default function AdminSettingsHub() {
   const sections = useMemo(
@@ -150,6 +281,69 @@ export default function AdminSettingsHub() {
           />
         )
       },
+      publicPageSection({
+        id: "about",
+        icon: Info,
+        title: "About Page",
+        description: "Manage the about hero, brand story, mission, values, team prompt, and CTA.",
+        meta: "Controls /about page copy, values, and CTA.",
+        publicHref: "/about",
+        fields: aboutFields
+      }),
+      publicPageSection({
+        id: "services",
+        icon: ListChecks,
+        title: "Services Page",
+        description: "Manage the services hero, category helper copy, empty state, detail page helper text, and CTA.",
+        meta: "Controls /services and service detail page wrapper copy.",
+        publicHref: "/services",
+        fields: servicesFields
+      }),
+      publicPageSection({
+        id: "packages",
+        icon: Package,
+        title: "Packages Page",
+        description: "Manage the packages hero, category helper copy, empty state, and CTA.",
+        meta: "Controls /packages page wrapper copy and CTA.",
+        publicHref: "/packages",
+        fields: packagesFields
+      }),
+      publicPageSection({
+        id: "portfolio",
+        icon: Images,
+        title: "Portfolio Page",
+        description: "Manage the portfolio hero, empty state, detail page helper text, and CTA.",
+        meta: "Controls /portfolio and portfolio detail page wrapper copy.",
+        publicHref: "/portfolio",
+        fields: portfolioFields
+      }),
+      publicPageSection({
+        id: "testimonials",
+        icon: MessageSquareQuote,
+        title: "Testimonials Page",
+        description: "Manage the testimonials hero, empty state, and CTA.",
+        meta: "Controls /testimonials page copy and CTA.",
+        publicHref: "/testimonials",
+        fields: testimonialsFields
+      }),
+      publicPageSection({
+        id: "insights",
+        icon: Newspaper,
+        title: "Insights Page",
+        description: "Manage the insights hero, empty state, related insight labels, and CTA.",
+        meta: "Controls /insights and insight detail related-section copy.",
+        publicHref: "/insights",
+        fields: insightsFields
+      }),
+      publicPageSection({
+        id: "team",
+        icon: UsersRound,
+        title: "Team Page",
+        description: "Manage the team hero, category helper label, empty state, and CTA.",
+        meta: "Controls /team page copy and CTA.",
+        publicHref: "/team",
+        fields: teamFields
+      }),
       {
         id: "email",
         icon: ServerCog,

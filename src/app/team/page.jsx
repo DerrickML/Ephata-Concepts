@@ -8,24 +8,28 @@ import { groupedTeamMembers } from "@/lib/team.js";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Team",
-  description: "Meet the Ephata Concepts team behind our event planning and coordination work."
-};
+export async function generateMetadata() {
+  const page = await readCollection("teamPage");
+  return {
+    title: page.pageLabel || "Team",
+    description: page.heroIntro
+  };
+}
 
 export default async function TeamPage() {
-  const [teamCategories, teamMembers] = await Promise.all([
+  const [teamCategories, teamMembers, page] = await Promise.all([
     readCollection("teamCategories"),
-    readCollection("teamMembers")
+    readCollection("teamMembers"),
+    readCollection("teamPage")
   ]);
   const groups = groupedTeamMembers(teamMembers, teamCategories);
 
   return (
     <PageTransition>
       <PageHeader
-        label="Team"
-        title="People behind the calm."
-        intro="A focused team for planning, coordination, and guest experience."
+        label={page.pageLabel}
+        title={page.heroTitle}
+        intro={page.heroIntro}
       />
       <section className="section-pad">
         <div className="shell">
@@ -33,7 +37,7 @@ export default async function TeamPage() {
             groups.map((category) => (
               <div className="category-block team-category-block" key={category.id}>
                 <SectionHeader
-                  eyebrow="Team Category"
+                  eyebrow={page.categoryEyebrow}
                   title={category.name}
                   intro={category.description}
                 />
@@ -42,13 +46,19 @@ export default async function TeamPage() {
             ))
           ) : (
             <div className="empty-state">
-              <h2>Team details are coming soon.</h2>
-              <p>Check back for the full Ephata Concepts team.</p>
+              <h2>{page.emptyTitle}</h2>
+              {page.emptyMessage ? <p>{page.emptyMessage}</p> : null}
             </div>
           )}
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

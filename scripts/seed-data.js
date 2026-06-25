@@ -1,5 +1,15 @@
 import { readCollection, writeCollection } from "../src/lib/jsonStore.js";
-import { DEFAULT_HOME_PAGE, DEFAULT_SETTINGS } from "../src/lib/constants.js";
+import {
+  DEFAULT_ABOUT_PAGE,
+  DEFAULT_HOME_PAGE,
+  DEFAULT_INSIGHTS_PAGE,
+  DEFAULT_PACKAGES_PAGE,
+  DEFAULT_PORTFOLIO_PAGE,
+  DEFAULT_SERVICES_PAGE,
+  DEFAULT_SETTINGS,
+  DEFAULT_TEAM_PAGE,
+  DEFAULT_TESTIMONIALS_PAGE
+} from "../src/lib/constants.js";
 import { createUncategorizedCategory } from "../src/lib/contentCategories.js";
 
 const force = process.argv.includes("--force");
@@ -508,6 +518,19 @@ async function seedCollection(name, data) {
   console.log(`Seeded ${name}: ${Array.isArray(data) ? data.length : 1} record(s).`);
 }
 
+async function seedObjectCollection(name, data, label = name) {
+  const current = await readCollection(name);
+  if (force || !current.updatedAt) {
+    await writeCollection(name, {
+      ...data,
+      updatedAt: now
+    });
+    console.log(`Seeded ${label}.`);
+    return;
+  }
+  console.log(`Skipped ${label}; existing data found. Use --force to overwrite.`);
+}
+
 async function main() {
   await seedCollection("serviceCategories", serviceCategories);
   await seedCollection("services", services);
@@ -521,27 +544,15 @@ async function main() {
   await seedCollection("teamCategories", teamCategories);
   await seedCollection("teamMembers", teamMembers);
 
-  const currentSettings = await readCollection("settings");
-  if (force || !currentSettings.updatedAt) {
-    await writeCollection("settings", {
-      ...DEFAULT_SETTINGS,
-      updatedAt: now
-    });
-    console.log("Seeded settings.");
-  } else {
-    console.log("Skipped settings; existing data found. Use --force to overwrite.");
-  }
-
-  const currentHomePage = await readCollection("homePage");
-  if (force || !currentHomePage.updatedAt) {
-    await writeCollection("homePage", {
-      ...DEFAULT_HOME_PAGE,
-      updatedAt: now
-    });
-    console.log("Seeded home page.");
-  } else {
-    console.log("Skipped home page; existing data found. Use --force to overwrite.");
-  }
+  await seedObjectCollection("settings", DEFAULT_SETTINGS, "settings");
+  await seedObjectCollection("homePage", DEFAULT_HOME_PAGE, "home page");
+  await seedObjectCollection("aboutPage", DEFAULT_ABOUT_PAGE, "about page");
+  await seedObjectCollection("servicesPage", DEFAULT_SERVICES_PAGE, "services page");
+  await seedObjectCollection("packagesPage", DEFAULT_PACKAGES_PAGE, "packages page");
+  await seedObjectCollection("portfolioPage", DEFAULT_PORTFOLIO_PAGE, "portfolio page");
+  await seedObjectCollection("testimonialsPage", DEFAULT_TESTIMONIALS_PAGE, "testimonials page");
+  await seedObjectCollection("insightsPage", DEFAULT_INSIGHTS_PAGE, "insights page");
+  await seedObjectCollection("teamPage", DEFAULT_TEAM_PAGE, "team page");
 
   const enquiries = await readCollection("enquiries");
   if (force && Array.isArray(enquiries)) {

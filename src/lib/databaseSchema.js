@@ -25,6 +25,13 @@ export const OBJECT_COLLECTIONS = new Set([
   "settings",
   "emailSettings",
   "homePage",
+  "aboutPage",
+  "servicesPage",
+  "packagesPage",
+  "portfolioPage",
+  "testimonialsPage",
+  "insightsPage",
+  "teamPage",
   "contactPage",
   "consultationPage"
 ]);
@@ -53,6 +60,13 @@ export const IMPORT_ORDER = [
   "settings",
   "emailSettings",
   "homePage",
+  "aboutPage",
+  "servicesPage",
+  "packagesPage",
+  "portfolioPage",
+  "testimonialsPage",
+  "insightsPage",
+  "teamPage",
   "contactPage",
   "consultationPage"
 ];

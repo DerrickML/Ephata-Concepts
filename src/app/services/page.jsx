@@ -10,25 +10,28 @@ import { readCollection } from "@/lib/jsonStore.js";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Services",
-  description:
-    "Explore Ephata Concepts event planning, coordination, guest management, vendor management, content creation, and reporting services."
-};
+export async function generateMetadata() {
+  const page = await readCollection("servicesPage");
+  return {
+    title: page.pageLabel || "Services",
+    description: page.heroIntro
+  };
+}
 
 export default async function ServicesPage() {
-  const [services, categories] = await Promise.all([
+  const [services, categories, page] = await Promise.all([
     readCollection("services"),
-    readCollection("serviceCategories")
+    readCollection("serviceCategories"),
+    readCollection("servicesPage")
   ]);
   const groups = groupedCategorizedItems(services, categories);
 
   return (
     <PageTransition>
       <PageHeader
-        label="Services"
-        title="Support that composes the day."
-        intro="Planning, coordination, guest flow, vendors, content, and reflection."
+        label={page.pageLabel}
+        title={page.heroTitle}
+        intro={page.heroIntro}
       />
       <section className="section-pad">
         <div className="shell">
@@ -36,9 +39,9 @@ export default async function ServicesPage() {
             groups.map((category) => (
                 <div className="category-block" key={category.id}>
                   <SectionHeader
-                    eyebrow="Service Category"
+                    eyebrow={page.categoryEyebrow}
                     title={category.name}
-                    intro="Standalone support or part of a tailored package."
+                    intro={page.categoryIntro}
                   />
                   <div className="card-grid">
                     {category.items.map((service) => (
@@ -51,13 +54,19 @@ export default async function ServicesPage() {
             ))
           ) : (
             <EmptyState
-              title="No services published yet"
-              message="Services added in the admin panel will appear here."
+              title={page.emptyTitle}
+              message={page.emptyMessage}
             />
           )}
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

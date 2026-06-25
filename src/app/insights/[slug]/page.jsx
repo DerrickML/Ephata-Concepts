@@ -24,9 +24,10 @@ export async function generateMetadata({ params }) {
 
 export default async function InsightDetailPage({ params }) {
   const { slug } = await params;
-  const [posts, categories] = await Promise.all([
+  const [posts, categories, page] = await Promise.all([
     readCollection("insights"),
-    readCollection("insightCategories")
+    readCollection("insightCategories"),
+    readCollection("insightsPage")
   ]);
   const visiblePosts = publishedCategorizedItems(posts, categories);
   const post = visiblePosts.find((item) => item.slug === slug);
@@ -64,15 +65,21 @@ export default async function InsightDetailPage({ params }) {
         <section className="section-pad muted-band related-insights-section" id="related-insights">
           <div className="shell">
             <SectionHeader
-              eyebrow="Continue Reading"
-              title="Related insights."
-              intro="Selected by shared topics and category."
+              eyebrow={page.relatedEyebrow}
+              title={page.relatedTitle}
+              intro={page.relatedIntro}
             />
             <RelatedInsightsSlider items={related} />
           </div>
         </section>
       ) : null}
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

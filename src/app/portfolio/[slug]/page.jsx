@@ -21,8 +21,11 @@ export async function generateMetadata({ params }) {
 
 export default async function PortfolioDetailPage({ params }) {
   const { slug } = await params;
-  const rawItem = await getItemBySlug("portfolio", slug);
-  const categories = await readCollection("portfolioCategories");
+  const [rawItem, categories, page] = await Promise.all([
+    getItemBySlug("portfolio", slug),
+    readCollection("portfolioCategories"),
+    readCollection("portfolioPage")
+  ]);
   const item = rawItem ? publishedCategorizedItems([rawItem], categories)[0] : null;
   if (!item) notFound();
 
@@ -35,8 +38,8 @@ export default async function PortfolioDetailPage({ params }) {
             <p className="price-line">
               {item.location} · {item.date}
             </p>
-            <p>Planning structure, guest flow, vendor clarity, and a composed event day.</p>
-            <ButtonLink href="/book-consultation">Plan a Similar Event</ButtonLink>
+            <p>{page.detailSupportText}</p>
+            <ButtonLink href={page.detailPrimaryHref}>{page.detailPrimaryLabel}</ButtonLink>
           </div>
           <ViewTransition name={`portfolio-cover-${item.id}`} share="morph">
             <ArchImage src={item.coverImage} alt={item.title} />
@@ -50,7 +53,13 @@ export default async function PortfolioDetailPage({ params }) {
           </div>
         ) : null}
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

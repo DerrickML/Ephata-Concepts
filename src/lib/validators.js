@@ -117,6 +117,107 @@ function normalizeInternalHref(value, fallback = "/") {
   return input;
 }
 
+const PUBLIC_PAGE_COLLECTIONS = new Set([
+  "aboutPage",
+  "servicesPage",
+  "packagesPage",
+  "portfolioPage",
+  "testimonialsPage",
+  "insightsPage",
+  "teamPage"
+]);
+
+function normalizePageCta(input, fallbackHref = "/book-consultation") {
+  return {
+    ctaEyebrow: cleanString(input.ctaEyebrow, 80),
+    ctaTitle: cleanString(input.ctaTitle, 140),
+    ctaBody: cleanMultiline(input.ctaBody, 500),
+    ctaButtonLabel: cleanString(input.ctaButtonLabel, 80),
+    ctaButtonHref: normalizeInternalHref(input.ctaButtonHref, fallbackHref)
+  };
+}
+
+function normalizeBasePublicPage(input) {
+  return {
+    pageLabel: cleanString(input.pageLabel, 80),
+    heroTitle: cleanString(input.heroTitle, 160),
+    heroIntro: cleanMultiline(input.heroIntro, 500),
+    emptyTitle: cleanString(input.emptyTitle, 160),
+    emptyMessage: cleanMultiline(input.emptyMessage, 500),
+    ...normalizePageCta(input)
+  };
+}
+
+function normalizePublicPagePayload(collection, input) {
+  const base = normalizeBasePublicPage(input);
+
+  if (collection === "aboutPage") {
+    return {
+      ...base,
+      storyEyebrow: cleanString(input.storyEyebrow, 80),
+      storyTitle: cleanString(input.storyTitle, 160),
+      storyIntro: cleanMultiline(input.storyIntro, 500),
+      storyBody: cleanMultiline(input.storyBody, 700),
+      missionEyebrow: cleanString(input.missionEyebrow, 80),
+      missionTitle: cleanString(input.missionTitle, 160),
+      missionIntro: cleanMultiline(input.missionIntro, 500),
+      valuesItems: normalizePrepItems(input.valuesItems).slice(0, 8),
+      teamEyebrow: cleanString(input.teamEyebrow, 80),
+      teamTitle: cleanString(input.teamTitle, 160),
+      teamIntro: cleanMultiline(input.teamIntro, 500)
+    };
+  }
+
+  if (collection === "servicesPage") {
+    return {
+      ...base,
+      categoryEyebrow: cleanString(input.categoryEyebrow, 80),
+      categoryIntro: cleanMultiline(input.categoryIntro, 500),
+      detailSupportText: cleanMultiline(input.detailSupportText, 700),
+      detailPrimaryLabel: cleanString(input.detailPrimaryLabel, 80),
+      detailPrimaryHref: normalizeInternalHref(input.detailPrimaryHref, "/book-consultation"),
+      detailBackLabel: cleanString(input.detailBackLabel, 80),
+      detailBackHref: normalizeInternalHref(input.detailBackHref, "/services"),
+      fallbackRateLabel: cleanString(input.fallbackRateLabel, 80)
+    };
+  }
+
+  if (collection === "packagesPage") {
+    return {
+      ...base,
+      categoryEyebrow: cleanString(input.categoryEyebrow, 80),
+      categoryIntro: cleanMultiline(input.categoryIntro, 500)
+    };
+  }
+
+  if (collection === "portfolioPage") {
+    return {
+      ...base,
+      detailSupportText: cleanMultiline(input.detailSupportText, 700),
+      detailPrimaryLabel: cleanString(input.detailPrimaryLabel, 80),
+      detailPrimaryHref: normalizeInternalHref(input.detailPrimaryHref, "/book-consultation")
+    };
+  }
+
+  if (collection === "insightsPage") {
+    return {
+      ...base,
+      relatedEyebrow: cleanString(input.relatedEyebrow, 80),
+      relatedTitle: cleanString(input.relatedTitle, 160),
+      relatedIntro: cleanMultiline(input.relatedIntro, 500)
+    };
+  }
+
+  if (collection === "teamPage") {
+    return {
+      ...base,
+      categoryEyebrow: cleanString(input.categoryEyebrow, 80)
+    };
+  }
+
+  return base;
+}
+
 export function validateEnquiry(input) {
   const data = {
     fullName: cleanString(input.fullName, 120),
@@ -297,6 +398,10 @@ export function normalizeAdminPayload(collection, input) {
     };
   }
 
+  if (PUBLIC_PAGE_COLLECTIONS.has(collection)) {
+    return normalizePublicPagePayload(collection, input);
+  }
+
   if (collection === "contactPage") {
     return {
       heroTitle: cleanString(input.heroTitle, 160),
@@ -354,6 +459,9 @@ export function validateAdminPayload(collection, payload) {
   }
   if (collection === "homePage" && (!payload.heroTitle || !payload.heroIntro || !payload.ctaTitle)) {
     errors.heroTitle = "Hero title, hero intro, and CTA title are required.";
+  }
+  if (PUBLIC_PAGE_COLLECTIONS.has(collection) && (!payload.pageLabel || !payload.heroTitle || !payload.ctaTitle)) {
+    errors.heroTitle = "Page label, hero title, and CTA title are required.";
   }
   if (collection === "contactPage" && (!payload.heroTitle || !payload.formTitle)) {
     errors.heroTitle = "Hero title and form title are required.";

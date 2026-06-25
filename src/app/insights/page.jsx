@@ -10,15 +10,19 @@ import { readCollection } from "@/lib/jsonStore.js";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Insights",
-  description: "Event planning tips, coordination notes, and guidance from Ephata Concepts."
-};
+export async function generateMetadata() {
+  const page = await readCollection("insightsPage");
+  return {
+    title: page.pageLabel || "Insights",
+    description: page.heroIntro
+  };
+}
 
 export default async function InsightsPage() {
-  const [posts, categories] = await Promise.all([
+  const [posts, categories, page] = await Promise.all([
     readCollection("insights"),
-    readCollection("insightCategories")
+    readCollection("insightCategories"),
+    readCollection("insightsPage")
   ]);
   const visiblePosts = sortInsightsByDate(publishedCategorizedItems(posts, categories));
   const visibleCategories = published(categories);
@@ -26,20 +30,26 @@ export default async function InsightsPage() {
   return (
     <PageTransition>
       <PageHeader
-        label="Insights"
-        title="Notes for calmer events."
-        intro="Practical planning guidance, kept brief."
+        label={page.pageLabel}
+        title={page.heroTitle}
+        intro={page.heroIntro}
       />
       <section className="section-pad">
         <div className="shell">
           {visiblePosts.length ? (
             <InsightExplorer posts={visiblePosts} categories={visibleCategories} />
           ) : (
-            <EmptyState title="No insights published yet" />
+            <EmptyState title={page.emptyTitle} message={page.emptyMessage} />
           )}
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

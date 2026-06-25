@@ -9,20 +9,27 @@ import { readCollection } from "@/lib/jsonStore.js";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Testimonials",
-  description: "Client words about Ephata Concepts event planning and coordination."
-};
+export async function generateMetadata() {
+  const page = await readCollection("testimonialsPage");
+  return {
+    title: page.pageLabel || "Testimonials",
+    description: page.heroIntro
+  };
+}
 
 export default async function TestimonialsPage() {
-  const items = published(await readCollection("testimonials"));
+  const [testimonials, page] = await Promise.all([
+    readCollection("testimonials"),
+    readCollection("testimonialsPage")
+  ]);
+  const items = published(testimonials);
 
   return (
     <PageTransition>
       <PageHeader
-        label="Testimonials"
-        title="Clients remember the calm."
-        intro="Short notes from people who trusted us with the details."
+        label={page.pageLabel}
+        title={page.heroTitle}
+        intro={page.heroIntro}
       />
       <section className="section-pad">
         <div className="shell">
@@ -35,11 +42,17 @@ export default async function TestimonialsPage() {
               ))}
             </div>
           ) : (
-            <EmptyState title="No testimonials published yet" />
+            <EmptyState title={page.emptyTitle} message={page.emptyMessage} />
           )}
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

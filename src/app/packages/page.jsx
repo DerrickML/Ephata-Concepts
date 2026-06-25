@@ -10,25 +10,28 @@ import { readCollection } from "@/lib/jsonStore.js";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Packages",
-  description:
-    "Wedding, corporate, custom, additional service, and promotional packages from Ephata Concepts."
-};
+export async function generateMetadata() {
+  const page = await readCollection("packagesPage");
+  return {
+    title: page.pageLabel || "Packages",
+    description: page.heroIntro
+  };
+}
 
 export default async function PackagesPage() {
-  const [packages, categories] = await Promise.all([
+  const [packages, categories, page] = await Promise.all([
     readCollection("packages"),
-    readCollection("packageCategories")
+    readCollection("packageCategories"),
+    readCollection("packagesPage")
   ]);
   const groups = groupedCategorizedItems(packages, categories);
 
   return (
     <PageTransition>
       <PageHeader
-        label="Packages"
-        title="Packages with room to breathe."
-        intro="Start clear. Shape the scope after the consultation."
+        label={page.pageLabel}
+        title={page.heroTitle}
+        intro={page.heroIntro}
       />
       <section className="section-pad">
         <div className="shell">
@@ -36,9 +39,9 @@ export default async function PackagesPage() {
             groups.map((category) => (
                 <div className="category-block" key={category.id}>
                   <SectionHeader
-                    eyebrow="Package Group"
+                    eyebrow={page.categoryEyebrow}
                     title={category.name}
-                    intro="Simple starting points. Flexible scope."
+                    intro={page.categoryIntro}
                   />
                   <div className="card-grid">
                     {category.items.map((item) => (
@@ -50,11 +53,17 @@ export default async function PackagesPage() {
                 </div>
             ))
           ) : (
-            <EmptyState title="No packages published yet" />
+            <EmptyState title={page.emptyTitle} message={page.emptyMessage} />
           )}
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

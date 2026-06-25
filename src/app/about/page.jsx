@@ -9,51 +9,40 @@ import { featuredTeamMembers } from "@/lib/team.js";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "About",
-  description:
-    "Learn about Ephata Concepts, the meaning of Ephata, and the values behind our event planning and coordination work."
-};
-
-const values = [
-  {
-    title: "Excellence",
-    body: "We plan with care, refine the details, and aim to get it right the first time."
-  },
-  {
-    title: "Timely Delivery",
-    body: "We respect time, timelines, and the flow of every event."
-  },
-  {
-    title: "Accountability",
-    body: "We take ownership of the process and communicate clearly from planning to execution."
-  }
-];
+export async function generateMetadata() {
+  const page = await readCollection("aboutPage");
+  return {
+    title: page.pageLabel || "About",
+    description: page.heroIntro
+  };
+}
 
 export default async function AboutPage() {
-  const [settings, teamCategories, teamMembers] = await Promise.all([
+  const [settings, page, teamCategories, teamMembers] = await Promise.all([
     readCollection("settings"),
+    readCollection("aboutPage"),
     readCollection("teamCategories"),
     readCollection("teamMembers")
   ]);
   const featuredTeam = featuredTeamMembers(teamMembers, teamCategories, 5);
+  const values = Array.isArray(page.valuesItems) ? page.valuesItems : [];
 
   return (
     <PageTransition>
       <PageHeader
-        label="About"
-        title="A calm opening."
-        intro="Events held with grace, order, and care."
+        label={page.pageLabel}
+        title={page.heroTitle}
+        intro={page.heroIntro}
       />
       <section className="section-pad">
         <div className="shell split-section">
           <div>
             <SectionHeader
-              eyebrow="Brand Story"
-              title="Ephata means “be opened”."
-              intro="An opening into a new stage. A staircase into what comes next."
+              eyebrow={page.storyEyebrow}
+              title={page.storyTitle}
+              intro={page.storyIntro}
             />
-            <p>We plan with warmth, structure, and a steady eye on the guest experience.</p>
+            <p>{page.storyBody}</p>
           </div>
           <ArchImage
             src={settings?.aboutImage}
@@ -66,15 +55,15 @@ export default async function AboutPage() {
       <section className="section-pad muted-band">
         <div className="shell two-col-grid">
           <SectionHeader
-            eyebrow="Mission"
-            title="Clear. Accountable. Beautifully held."
-            intro="We protect the experience and keep decisions connected to the client’s priorities."
+            eyebrow={page.missionEyebrow}
+            title={page.missionTitle}
+            intro={page.missionIntro}
           />
           <div className="values-grid">
             {values.map((value) => (
-              <article className="value-card" key={value.title}>
-                <h3>{value.title}</h3>
-                <p>{value.body}</p>
+              <article className="value-card" key={value.label}>
+                <h3>{value.label}</h3>
+                <p>{value.text}</p>
               </article>
             ))}
           </div>
@@ -84,15 +73,21 @@ export default async function AboutPage() {
       <section className="section-pad">
         <div className="shell">
           <SectionHeader
-            eyebrow="Team"
-            title="Steady hands."
-            intro="Meet the people shaping the calm behind each event."
+            eyebrow={page.teamEyebrow}
+            title={page.teamTitle}
+            intro={page.teamIntro}
             align="right"
           />
           <TeamSlider members={featuredTeam} />
         </div>
       </section>
-      <CTASection />
+      <CTASection
+        eyebrow={page.ctaEyebrow}
+        title={page.ctaTitle}
+        body={page.ctaBody}
+        buttonLabel={page.ctaButtonLabel}
+        buttonHref={page.ctaButtonHref}
+      />
     </PageTransition>
   );
 }

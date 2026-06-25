@@ -141,6 +141,39 @@ assert.equal(normalizedHomePage.statisticsItems[0].value, "200+");
 assert.equal(normalizedHomePage.processItems[0].label, "Consultation");
 assert.equal(validateAdminPayload("homePage", normalizedHomePage).ok, true);
 
+const normalizedAboutPage = normalizeAdminPayload("aboutPage", {
+  pageLabel: "About",
+  heroTitle: "A calm opening.",
+  heroIntro: "Events held with care.",
+  valuesItems: "Excellence | Refined details",
+  ctaTitle: "Begin with clarity."
+});
+assert.equal(normalizedAboutPage.valuesItems[0].label, "Excellence");
+assert.equal(validateAdminPayload("aboutPage", normalizedAboutPage).ok, true);
+
+const normalizedServicesPage = normalizeAdminPayload("servicesPage", {
+  pageLabel: "Services",
+  heroTitle: "Support that composes the day.",
+  heroIntro: "Planning and coordination.",
+  detailPrimaryHref: "https://example.com/unsafe",
+  detailBackHref: "/services",
+  ctaTitle: "Start"
+});
+assert.equal(normalizedServicesPage.detailPrimaryHref, "/book-consultation");
+assert.equal(normalizedServicesPage.detailBackHref, "/services");
+assert.equal(validateAdminPayload("servicesPage", normalizedServicesPage).ok, true);
+
+const normalizedInsightsPage = normalizeAdminPayload("insightsPage", {
+  pageLabel: "Insights",
+  heroTitle: "Notes for calmer events.",
+  heroIntro: "Brief guidance.",
+  relatedTitle: "Related reads.",
+  ctaButtonHref: "/book-consultation",
+  ctaTitle: "Start"
+});
+assert.equal(normalizedInsightsPage.relatedTitle, "Related reads.");
+assert.equal(validateAdminPayload("insightsPage", normalizedInsightsPage).ok, true);
+
 const alignedRichText = normalizeRichTextDocument({
   type: "doc",
   content: [
@@ -196,6 +229,7 @@ assert.equal(allFiles.some((file) => /\.tsx?$/.test(file)), false);
 
 for (const file of [
   "src/app/api/uploads/[...path]/route.js",
+  "src/app/api/admin/public-pages/[page]/route.js",
   "src/app/api/enquiries/route.js",
   "src/lib/jsonStore.js",
   "src/lib/databaseStore.js",
