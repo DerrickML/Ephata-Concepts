@@ -7,6 +7,7 @@ const PAGE_COLLECTIONS = {
   services: "servicesPage",
   packages: "packagesPage",
   portfolio: "portfolioPage",
+  gallery: "galleryPage",
   testimonials: "testimonialsPage",
   insights: "insightsPage",
   team: "teamPage"

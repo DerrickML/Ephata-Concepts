@@ -22,6 +22,7 @@ export default function AdminCollectionIndex({
     serviceCategories: "services",
     packageCategories: "packages",
     portfolioCategories: "portfolio",
+    galleryAlbums: "gallery",
     insightCategories: "insights"
   };
   const isCategoryCollection = collection.endsWith("Categories");

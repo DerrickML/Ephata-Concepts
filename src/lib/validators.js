@@ -1,10 +1,11 @@
-import { EVENT_TYPES } from "./constants.js";
+import { EVENT_TYPES, GALLERY_DISPLAY_STYLES } from "./constants.js";
 import { isRichTextEmpty, normalizeRichTextDocument } from "./richText.js";
 import { slugify } from "./slugify.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const IMAGE_PATH_RE = /^(brand|portfolio|blog|testimonials|team|services|packages|temp)\/[a-zA-Z0-9._/-]+\.(jpg|jpeg|png|webp|svg)$/;
+const IMAGE_PATH_RE = /^(brand|portfolio|gallery|blog|testimonials|team|services|packages|temp)\/[a-zA-Z0-9._/-]+\.(jpg|jpeg|png|webp|svg)$/;
 const PUBLIC_IMAGE_PATH_RE = /^\/[a-zA-Z0-9._/-]+\.(jpg|jpeg|png|webp|svg)$/;
+const GALLERY_DISPLAY_STYLE_VALUES = new Set(GALLERY_DISPLAY_STYLES.map((style) => style.value));
 
 export function cleanString(value, max = 2000) {
   return String(value || "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -62,6 +63,35 @@ export function normalizeList(value, max = 300) {
     .split(/\n|,/)
     .map((entry) => cleanString(entry, max))
     .filter(Boolean);
+}
+
+function normalizeExternalUrl(value, max = 2000) {
+  const input = cleanString(value, max);
+  if (!input) return "";
+  try {
+    const url = new URL(input);
+    if ((url.protocol === "http:" || url.protocol === "https:") && !url.username && !url.password) {
+      return url.toString();
+    }
+  } catch {
+    return "";
+  }
+  return "";
+}
+
+function normalizeUrlList(value) {
+  const entries = Array.isArray(value) ? value : String(value || "").split(/\r?\n/);
+  return entries
+    .map((entry) => normalizeExternalUrl(entry))
+    .filter(Boolean);
+}
+
+function normalizeGalleryImages(value) {
+  const entries = Array.isArray(value) ? value : String(value || "").split(/\r?\n/);
+  return entries
+    .map((entry) => normalizeImagePath(entry))
+    .filter(Boolean)
+    .slice(0, 4);
 }
 
 function normalizePrepItems(value) {
@@ -122,6 +152,7 @@ const PUBLIC_PAGE_COLLECTIONS = new Set([
   "servicesPage",
   "packagesPage",
   "portfolioPage",
+  "galleryPage",
   "testimonialsPage",
   "insightsPage",
   "teamPage"
@@ -196,6 +227,16 @@ function normalizePublicPagePayload(collection, input) {
       detailSupportText: cleanMultiline(input.detailSupportText, 700),
       detailPrimaryLabel: cleanString(input.detailPrimaryLabel, 80),
       detailPrimaryHref: normalizeInternalHref(input.detailPrimaryHref, "/book-consultation")
+    };
+  }
+
+  if (collection === "galleryPage") {
+    return {
+      ...base,
+      displayStyle: GALLERY_DISPLAY_STYLE_VALUES.has(input.displayStyle) ? input.displayStyle : "bento",
+      imageLimitNote: cleanString(input.imageLimitNote, 160),
+      externalLinkLabel: cleanString(input.externalLinkLabel, 80),
+      videoLinkLabel: cleanString(input.videoLinkLabel, 80)
     };
   }
 
@@ -293,6 +334,20 @@ export function normalizeAdminPayload(collection, input) {
       description: cleanMultiline(input.description, 5000),
       coverImage: normalizeImagePath(input.coverImage),
       gallery: normalizeList(input.gallery, 2000).map(normalizeImagePath).filter(Boolean)
+    };
+  }
+
+  if (collection === "galleryAlbums") {
+    return {
+      ...common,
+      title: cleanString(input.title, 160),
+      slug: slugify(input.slug || input.title),
+      description: cleanMultiline(input.description, 900),
+      eventDate: cleanString(input.eventDate, 80),
+      location: cleanString(input.location, 160),
+      images: normalizeGalleryImages(input.images),
+      externalAlbumUrl: normalizeExternalUrl(input.externalAlbumUrl),
+      videoLinks: normalizeUrlList(input.videoLinks)
     };
   }
 
@@ -444,6 +499,14 @@ export function validateAdminPayload(collection, payload) {
   }
   if (collection === "portfolio" && (!payload.title || !payload.categoryId)) {
     errors.title = "Title and type are required.";
+  }
+  if (collection === "galleryAlbums") {
+    if (!payload.title || !payload.externalAlbumUrl) {
+      errors.title = "Title and full album link are required.";
+    }
+    if (!payload.images?.length && !payload.videoLinks?.length) {
+      errors.images = "Add at least one preview image or video link.";
+    }
   }
   if (collection === "testimonials" && (!payload.clientName || !payload.quote)) {
     errors.clientName = "Client name and quote are required.";

@@ -13,6 +13,7 @@ export const COLLECTIONS = {
   packageCategories: { file: "packageCategories.json", type: "array" },
   portfolio: { file: "portfolio.json", type: "array" },
   portfolioCategories: { file: "portfolioCategories.json", type: "array" },
+  galleryAlbums: { file: "galleryAlbums.json", type: "array" },
   testimonials: { file: "testimonials.json", type: "array" },
   insights: { file: "insights.json", type: "array" },
   insightCategories: { file: "insightCategories.json", type: "array" },
@@ -34,6 +35,7 @@ export const COLLECTIONS = {
   servicesPage: { file: "servicesPage.json", type: "object" },
   packagesPage: { file: "packagesPage.json", type: "object" },
   portfolioPage: { file: "portfolioPage.json", type: "object" },
+  galleryPage: { file: "galleryPage.json", type: "object" },
   testimonialsPage: { file: "testimonialsPage.json", type: "object" },
   insightsPage: { file: "insightsPage.json", type: "object" },
   teamPage: { file: "teamPage.json", type: "object" },
@@ -48,6 +50,7 @@ export const ARRAY_COLLECTIONS = Object.entries(COLLECTIONS)
 export const UPLOAD_FOLDERS = [
   "brand",
   "portfolio",
+  "gallery",
   "blog",
   "testimonials",
   "team",
@@ -71,6 +74,7 @@ export const PUBLIC_NAV_ITEMS = [
   { href: "/services", label: "Services" },
   { href: "/packages", label: "Packages" },
   { href: "/portfolio", label: "Portfolio" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/insights", label: "Insights" },
   { href: "/contact", label: "Contact" }
 ];
@@ -80,6 +84,7 @@ export const ADMIN_NAV_ITEMS = [
   { href: "/admin/services", label: "Services", section: "services" },
   { href: "/admin/packages", label: "Packages", section: "packages" },
   { href: "/admin/portfolio", label: "Portfolio", section: "portfolio" },
+  { href: "/admin/gallery", label: "Gallery", section: "gallery" },
   { href: "/admin/testimonials", label: "Testimonials", section: "testimonials" },
   { href: "/admin/insights", label: "Insights", section: "insights" },
   { href: "/admin/team", label: "Team", section: "team" },
@@ -97,6 +102,15 @@ export const EVENT_TYPES = [
   "Launch",
   "Professional Function",
   "Other"
+];
+
+export const GALLERY_DISPLAY_STYLES = [
+  { value: "uniform-grid", label: "Uniform Grid" },
+  { value: "masonry", label: "Masonry" },
+  { value: "mosaic", label: "Mosaic / Collage" },
+  { value: "carousel", label: "Carousel" },
+  { value: "infinite-scroll", label: "Infinite Scroll" },
+  { value: "bento", label: "Bento Box" }
 ];
 
 export const DEFAULT_SETTINGS = {
@@ -273,6 +287,23 @@ export const DEFAULT_PORTFOLIO_PAGE = {
   ctaButtonHref: "/book-consultation"
 };
 
+export const DEFAULT_GALLERY_PAGE = {
+  pageLabel: "Gallery",
+  heroTitle: "Albums with room to explore.",
+  heroIntro: "Short previews from selected events, with links to the complete albums and video collections.",
+  displayStyle: "bento",
+  emptyTitle: "No gallery albums published yet",
+  emptyMessage: "Albums added in the admin panel will appear here.",
+  imageLimitNote: "Each album preview shows up to four images.",
+  externalLinkLabel: "Open Full Album",
+  videoLinkLabel: "Watch Video",
+  ctaEyebrow: "Book Consultation",
+  ctaTitle: "Ready for a calmer event?",
+  ctaBody: "Tell us what you are planning. We will shape the next step.",
+  ctaButtonLabel: "Start",
+  ctaButtonHref: "/book-consultation"
+};
+
 export const DEFAULT_TESTIMONIALS_PAGE = {
   pageLabel: "Testimonials",
   heroTitle: "Clients remember the calm.",
@@ -358,6 +389,7 @@ COLLECTIONS.aboutPage.default = DEFAULT_ABOUT_PAGE;
 COLLECTIONS.servicesPage.default = DEFAULT_SERVICES_PAGE;
 COLLECTIONS.packagesPage.default = DEFAULT_PACKAGES_PAGE;
 COLLECTIONS.portfolioPage.default = DEFAULT_PORTFOLIO_PAGE;
+COLLECTIONS.galleryPage.default = DEFAULT_GALLERY_PAGE;
 COLLECTIONS.testimonialsPage.default = DEFAULT_TESTIMONIALS_PAGE;
 COLLECTIONS.insightsPage.default = DEFAULT_INSIGHTS_PAGE;
 COLLECTIONS.teamPage.default = DEFAULT_TEAM_PAGE;

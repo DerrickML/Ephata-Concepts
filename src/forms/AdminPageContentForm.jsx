@@ -149,6 +149,24 @@ export default function AdminPageContentForm({
                     onChange={(event) => setField(field.name, event.target.value)}
                     disabled={!canEdit}
                   />
+                ) : field.type === "select" ? (
+                  <select
+                    id={`page-${field.name}`}
+                    name={field.name}
+                    value={form[field.name] || ""}
+                    onChange={(event) => setField(field.name, event.target.value)}
+                    disabled={!canEdit}
+                  >
+                    {(field.options || []).map((option) => {
+                      const optionValue = typeof option === "object" ? option.value : option;
+                      const optionLabel = typeof option === "object" ? option.label : option;
+                      return (
+                        <option value={optionValue} key={optionValue}>
+                          {optionLabel}
+                        </option>
+                      );
+                    })}
+                  </select>
                 ) : (
                   <input
                     id={`page-${field.name}`}

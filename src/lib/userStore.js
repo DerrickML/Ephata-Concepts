@@ -52,6 +52,16 @@ export async function ensureIdentityBootstrap() {
     };
     profiles = [...profiles, systemProfile];
     await writeCollection("accessProfiles", profiles);
+  } else if (systemProfile.isSystem) {
+    const nextPermissions = fullPermissions();
+    const missingSection = Object.keys(nextPermissions).some(
+      (section) => JSON.stringify(systemProfile.permissions?.[section] || []) !== JSON.stringify(nextPermissions[section])
+    );
+    if (missingSection) {
+      systemProfile = { ...systemProfile, permissions: nextPermissions, updatedAt: now };
+      profiles = profiles.map((profile) => profile.id === systemProfile.id ? systemProfile : profile);
+      await writeCollection("accessProfiles", profiles);
+    }
   }
 
   if (!users.length) {

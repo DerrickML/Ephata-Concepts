@@ -26,6 +26,7 @@ const iconByHref = {
   "/admin/services": Sparkles,
   "/admin/packages": PackageCheck,
   "/admin/portfolio": Images,
+  "/admin/gallery": Images,
   "/admin/testimonials": MessageSquareQuote,
   "/admin/insights": Newspaper,
   "/admin/team": UsersRound,

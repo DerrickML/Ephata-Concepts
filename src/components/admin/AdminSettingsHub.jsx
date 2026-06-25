@@ -20,6 +20,7 @@ import AdminPageContentForm from "@/forms/AdminPageContentForm.jsx";
 import AdminSettingsForm from "@/forms/AdminSettingsForm.jsx";
 import AdminEmailSettingsForm from "./AdminEmailSettingsForm.jsx";
 import AdminSocialLinksForm from "./AdminSocialLinksForm.jsx";
+import { GALLERY_DISPLAY_STYLES } from "@/lib/constants.js";
 
 const contactFields = [
   { name: "heroTitle", label: "Hero Title" },
@@ -177,6 +178,21 @@ const portfolioFields = [
   ...ctaFields
 ];
 
+const galleryFields = [
+  ...pageHeroFields,
+  {
+    name: "displayStyle",
+    label: "Display Style",
+    type: "select",
+    options: GALLERY_DISPLAY_STYLES
+  },
+  ...emptyStateFields,
+  { name: "imageLimitNote", label: "Image Limit Note" },
+  { name: "externalLinkLabel", label: "Full Album Link Label" },
+  { name: "videoLinkLabel", label: "Video Link Label" },
+  ...ctaFields
+];
+
 const testimonialsFields = [
   ...pageHeroFields,
   ...emptyStateFields,
@@ -316,6 +332,15 @@ export default function AdminSettingsHub() {
         meta: "Controls /portfolio and portfolio detail page wrapper copy.",
         publicHref: "/portfolio",
         fields: portfolioFields
+      }),
+      publicPageSection({
+        id: "gallery",
+        icon: Images,
+        title: "Gallery Page",
+        description: "Manage the gallery hero, album display style, empty state, media labels, and CTA.",
+        meta: "Controls /gallery page copy, style, and media labels.",
+        publicHref: "/gallery",
+        fields: galleryFields
       }),
       publicPageSection({
         id: "testimonials",

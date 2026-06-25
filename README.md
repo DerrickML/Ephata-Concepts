@@ -235,6 +235,7 @@ The Settings area is the central editor for public page copy. It currently manag
 - Services page hero, category helper copy, empty state, service detail helper copy, and CTA
 - Packages page hero, category helper copy, empty state, and CTA
 - Portfolio page hero, empty state, portfolio detail helper copy, and CTA
+- Gallery page hero, display style, empty state, album/video labels, and CTA
 - Testimonials page hero, empty state, and CTA
 - Insights page hero, empty state, related insight section labels, and CTA
 - Team page hero, category helper label, empty state, and CTA
@@ -255,6 +256,8 @@ Example:
 200+ | Events Managed | Weddings, retreats, launches, and professional gatherings.
 50+ | Vendor Partners | Trusted teams coordinated around each event brief.
 ```
+
+Gallery albums are managed under `Admin > Gallery`. Each album accepts up to four preview images, one required full album URL, and optional external video URLs. The public gallery layout is selected under `Admin > Settings > Gallery Page`.
 
 ## Development
 

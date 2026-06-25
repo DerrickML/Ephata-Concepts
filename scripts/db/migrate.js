@@ -3,7 +3,10 @@ import mysql from "mysql2/promise";
 
 loadProjectEnv();
 
-const migrations = [await import("./migrations/001-initial-schema.js")];
+const migrations = [
+  await import("./migrations/001-initial-schema.js"),
+  await import("./migrations/002-gallery-albums.js")
+];
 const { migrationDatabaseConfig } = await import("../../src/lib/database.js");
 const pool = mysql.createPool(migrationDatabaseConfig());
 

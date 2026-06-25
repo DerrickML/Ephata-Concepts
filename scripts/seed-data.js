@@ -1,6 +1,7 @@
 import { readCollection, writeCollection } from "../src/lib/jsonStore.js";
 import {
   DEFAULT_ABOUT_PAGE,
+  DEFAULT_GALLERY_PAGE,
   DEFAULT_HOME_PAGE,
   DEFAULT_INSIGHTS_PAGE,
   DEFAULT_PACKAGES_PAGE,
@@ -538,6 +539,7 @@ async function main() {
   await seedCollection("packages", packages);
   await seedCollection("portfolioCategories", portfolioCategories);
   await seedCollection("portfolio", portfolio);
+  await seedCollection("galleryAlbums", []);
   await seedCollection("testimonials", testimonials);
   await seedCollection("insightCategories", insightCategories);
   await seedCollection("insights", insights);
@@ -550,6 +552,7 @@ async function main() {
   await seedObjectCollection("servicesPage", DEFAULT_SERVICES_PAGE, "services page");
   await seedObjectCollection("packagesPage", DEFAULT_PACKAGES_PAGE, "packages page");
   await seedObjectCollection("portfolioPage", DEFAULT_PORTFOLIO_PAGE, "portfolio page");
+  await seedObjectCollection("galleryPage", DEFAULT_GALLERY_PAGE, "gallery page");
   await seedObjectCollection("testimonialsPage", DEFAULT_TESTIMONIALS_PAGE, "testimonials page");
   await seedObjectCollection("insightsPage", DEFAULT_INSIGHTS_PAGE, "insights page");
   await seedObjectCollection("teamPage", DEFAULT_TEAM_PAGE, "team page");

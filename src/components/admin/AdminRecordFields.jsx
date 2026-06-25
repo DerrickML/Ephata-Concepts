@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { Trash2 } from "lucide-react";
 import ImageUploader from "./ImageUploader.jsx";
 import { createEmptyRichTextDocument } from "@/lib/richText.js";
 
@@ -29,6 +30,58 @@ export function valueForEdit(item, fields) {
     values[field.name] = Array.isArray(value) ? value.join("\n") : value ?? values[field.name];
   }
   return values;
+}
+
+function splitLines(value) {
+  return String(value || "")
+    .split("\n")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function MultiImageUploader({ collection, field, value, onChange, id, scope }) {
+  const maxImages = field.maxImages || 4;
+  const images = splitLines(value).slice(0, maxImages);
+  const slots = images.length < maxImages ? [...images, ""] : images;
+
+  function updateImage(index, nextValue) {
+    const next = [...images];
+    next[index] = nextValue;
+    onChange(next.filter(Boolean).slice(0, maxImages).join("\n"));
+  }
+
+  function removeImage(index) {
+    onChange(images.filter((_, imageIndex) => imageIndex !== index).join("\n"));
+  }
+
+  return (
+    <div className="multi-image-uploader">
+      {slots.map((image, index) => (
+        <div className="multi-image-row" key={`${id}-${index}`}>
+          <ImageUploader
+            id={`${id}-${index}`}
+            name={`${field.name}-${index}`}
+            folder={field.folder}
+            value={image}
+            onChange={(nextValue) => updateImage(index, nextValue)}
+          />
+          {images.length > 0 ? (
+            <button
+              type="button"
+              className="btn-admin danger"
+              onClick={() => removeImage(index)}
+              aria-label={`Remove image ${index + 1}`}
+            >
+              <Trash2 size={15} aria-hidden="true" />
+              Remove
+            </button>
+          ) : null}
+        </div>
+      ))}
+      <small>{images.length}/{maxImages} preview images added.</small>
+      <input type="hidden" id={id} name={`${collection}-${scope}-${field.name}-serialized`} value={value || ""} readOnly />
+    </div>
+  );
 }
 
 export function AdminField({ collection, field, value, onChange, scope = "record" }) {
@@ -89,6 +142,15 @@ export function AdminField({ collection, field, value, onChange, scope = "record
           folder={field.folder}
           value={value || ""}
           onChange={onChange}
+        />
+      ) : field.type === "multiimage" ? (
+        <MultiImageUploader
+          collection={collection}
+          field={field}
+          value={value || ""}
+          onChange={onChange}
+          id={id}
+          scope={scope}
         />
       ) : field.type === "richtext" ? (
         <RichTextEditor

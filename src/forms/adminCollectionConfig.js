@@ -1,6 +1,7 @@
 import {
   defaultColumns,
   contentCategoryFields,
+  galleryAlbumFields,
   insightFields,
   packageFields,
   portfolioFields,
@@ -57,6 +58,16 @@ export const adminCollectionConfig = {
     description: "Manage event work, gallery entries, featured flags, and publication state.",
     fields: portfolioFields,
     columns: defaultColumns.portfolio
+  },
+  galleryAlbums: {
+    collection: "galleryAlbums",
+    apiPath: "/api/admin/gallery-albums",
+    path: "/admin/gallery",
+    title: "Gallery Albums",
+    singularTitle: "Gallery Album",
+    description: "Manage public gallery album previews, full album links, and external video links.",
+    fields: galleryAlbumFields,
+    columns: defaultColumns.galleryAlbums
   },
   portfolioCategories: {
     collection: "portfolioCategories",

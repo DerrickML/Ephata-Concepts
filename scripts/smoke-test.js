@@ -42,6 +42,7 @@ assert.equal(slugify("Full Event Planning"), "full-event-planning");
 assert.equal(publicUploadUrl("portfolio/sample.webp"), "/api/uploads/portfolio/sample.webp");
 assert.throws(() => safeUploadPath("../etc/passwd"), /Invalid|Unsafe/);
 assert.equal(tableForCollection("services"), "services");
+assert.equal(tableForCollection("galleryAlbums"), "gallery_albums");
 assert.equal(indexedRecordFields({ categoryId: "planning", published: true }, 3).categoryId, "planning");
 assert.equal(indexedRecordFields({ categoryId: "planning", published: true }, 3).position, 3);
 
@@ -174,6 +175,32 @@ const normalizedInsightsPage = normalizeAdminPayload("insightsPage", {
 assert.equal(normalizedInsightsPage.relatedTitle, "Related reads.");
 assert.equal(validateAdminPayload("insightsPage", normalizedInsightsPage).ok, true);
 
+const normalizedGalleryAlbum = normalizeAdminPayload("galleryAlbums", {
+  title: "Launch Night",
+  externalAlbumUrl: "https://gallery.example.com/launch-night",
+  images: [
+    "gallery/one.webp",
+    "gallery/two.webp",
+    "gallery/three.webp",
+    "gallery/four.webp",
+    "gallery/five.webp"
+  ],
+  videoLinks: "https://video.example.com/watch\njavascript:alert(1)"
+});
+assert.equal(normalizedGalleryAlbum.images.length, 4);
+assert.deepEqual(normalizedGalleryAlbum.videoLinks, ["https://video.example.com/watch"]);
+assert.equal(validateAdminPayload("galleryAlbums", normalizedGalleryAlbum).ok, true);
+
+const normalizedGalleryPage = normalizeAdminPayload("galleryPage", {
+  pageLabel: "Gallery",
+  heroTitle: "Albums",
+  heroIntro: "Selected previews.",
+  displayStyle: "masonry",
+  ctaTitle: "Start"
+});
+assert.equal(normalizedGalleryPage.displayStyle, "masonry");
+assert.equal(validateAdminPayload("galleryPage", normalizedGalleryPage).ok, true);
+
 const alignedRichText = normalizeRichTextDocument({
   type: "doc",
   content: [
@@ -230,6 +257,8 @@ assert.equal(allFiles.some((file) => /\.tsx?$/.test(file)), false);
 for (const file of [
   "src/app/api/uploads/[...path]/route.js",
   "src/app/api/admin/public-pages/[page]/route.js",
+  "src/app/api/admin/gallery-albums/route.js",
+  "src/app/api/admin/gallery-albums/[id]/route.js",
   "src/app/api/enquiries/route.js",
   "src/lib/jsonStore.js",
   "src/lib/databaseStore.js",

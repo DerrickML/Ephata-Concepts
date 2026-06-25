@@ -52,6 +52,33 @@ export function portfolioFields(categories = []) {
   ];
 }
 
+export const galleryAlbumFields = [
+  { name: "title", label: "Album title", required: true },
+  { name: "slug", label: "Slug", help: "Leave blank to generate from title." },
+  { name: "description", label: "Description", type: "textarea", rows: 4 },
+  { name: "eventDate", label: "Date or year" },
+  { name: "location", label: "Location" },
+  {
+    name: "images",
+    label: "Preview images",
+    type: "multiimage",
+    folder: "gallery",
+    maxImages: 4,
+    help: "Upload or paste up to four preview images. The full album should live at the external album link."
+  },
+  { name: "externalAlbumUrl", label: "Full album link", type: "url", required: true },
+  {
+    name: "videoLinks",
+    label: "Video links",
+    type: "textarea",
+    rows: 4,
+    help: "One video URL per line. Videos are linked externally rather than uploaded."
+  },
+  { name: "featured", label: "Featured", type: "checkbox" },
+  { name: "published", label: "Published", type: "checkbox", defaultValue: true },
+  { name: "sortOrder", label: "Sort order", type: "number", defaultValue: 999 }
+];
+
 export const testimonialFields = [
   { name: "clientName", label: "Client name", required: true },
   { name: "clientRole", label: "Client role or event type" },
@@ -140,6 +167,12 @@ export const defaultColumns = {
     { key: "title", label: "Title" },
     { key: "categoryName", label: "Type" },
     { key: "location", label: "Location" }
+  ],
+  galleryAlbums: [
+    { key: "title", label: "Album" },
+    { key: "location", label: "Location" },
+    { key: "images", label: "Images", render: (row) => row.images?.length || 0 },
+    { key: "videoLinks", label: "Videos", render: (row) => row.videoLinks?.length || 0 }
   ],
   testimonials: [
     { key: "clientName", label: "Client" },
